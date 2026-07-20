@@ -47,6 +47,7 @@
   .hero {
     position: relative;
     min-height: 100vh;
+    min-height: 100dvh;   /* exactly the visible viewport, incl. mobile toolbar */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -123,7 +124,8 @@
   /* ---------- Sections ---------- */
   section {
     max-width: 940px; margin: 0 auto; padding: 3.5rem 1.5rem;
-    min-height: 100vh;   /* stable height (does not resize as the mobile toolbar hides) */
+    min-height: 100vh;
+    min-height: 100dvh;  /* match the visible viewport so the next section can't peek through */
     display: flex; flex-direction: column; justify-content: safe center;
     scroll-snap-align: start;
   }
