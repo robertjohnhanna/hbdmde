@@ -176,7 +176,7 @@
   .flock { position: relative; overflow: hidden; }
   .flock > h2, .flock > .timeline, .flock > .stats, .flock > .dogs { position: relative; z-index: 1; }
   .birds { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
-  .birds[data-shape="paw"] { z-index: 2; }   /* paw prints drift over the dog photos */
+  .pages { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
   .timeline { position: relative; padding-left: 2rem; }
   .timeline::before {
     content: '';
@@ -812,7 +812,7 @@
 
   <!-- STATS + DOGS -->
   <section class="flock">
-    <canvas class="birds" data-shape="gull" aria-hidden="true"></canvas>
+    <canvas class="birds" data-shape="mix" aria-hidden="true"></canvas>
     <div class="stats">
       <div class="stat-card">
         <div class="value" id="stat-age">–</div>
@@ -869,7 +869,7 @@
 
   <!-- TIMELINE -->
   <section id="story" class="flock">
-    <canvas class="birds" data-shape="bird" aria-hidden="true"></canvas>
+    <canvas class="pages" id="story-pages" aria-hidden="true"></canvas>
     <h2>Our <span>story</span></h2>
     <div class="timeline">
       <div class="event">
@@ -1156,14 +1156,16 @@
     const TAU = Math.PI * 2;
 
     // Per-shape drawing (local coords; birds/gulls point +x after rotation)
-    const SHAPES = {
+    const SHAPES = {                                  // each sets its own style so a flock can mix shapes
       bird(ctx, b) {                                  // sharp chevron
+        ctx.strokeStyle = 'rgba(74,62,110,0.34)'; ctx.lineWidth = 1.5;
         const span = 3.4 + (Math.sin(b.flap) * 0.5 + 0.5) * 3.2;
         ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.atan2(b.vy, b.vx));
         ctx.beginPath(); ctx.moveTo(-3, -span); ctx.lineTo(2.5, 0); ctx.lineTo(-3, span); ctx.stroke();
         ctx.restore();
       },
       gull(ctx, b) {                                  // curved gull "M"
+        ctx.strokeStyle = 'rgba(74,62,110,0.32)'; ctx.lineWidth = 1.5;
         const span = 3.6 + (Math.sin(b.flap) * 0.5 + 0.5) * 3.6;
         ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.atan2(b.vy, b.vx));
         ctx.beginPath();
@@ -1173,8 +1175,9 @@
         ctx.stroke();
         ctx.restore();
       },
-      paw(ctx, b) {                                   // filled paw print (upright)
-        const s = b.size * 1.3;
+      paw(ctx, b) {                                   // filled paw print (upright, drifts with the flock)
+        ctx.fillStyle = 'rgba(112,84,132,0.3)';
+        const s = b.size * 1.15;
         ctx.save(); ctx.translate(b.x, b.y); ctx.scale(s, s);
         ctx.beginPath(); ctx.ellipse(0, 1.8, 2.6, 2.2, 0, 0, TAU); ctx.fill();
         for (const t of [[-2.4, -1.3, 1.05], [-0.85, -3, 1.1], [0.85, -3, 1.1], [2.4, -1.3, 1.05]]) {
@@ -1183,16 +1186,17 @@
         ctx.restore();
       }
     };
-    const STYLE = {
-      bird: { mode: 'stroke', color: 'rgba(74,62,110,0.34)', width: 1.5, density: 26000, min: 16, max: 44, rotate: true },
-      gull: { mode: 'stroke', color: 'rgba(74,62,110,0.32)', width: 1.5, density: 27000, min: 16, max: 40, rotate: true },
-      paw:  { mode: 'fill',   color: 'rgba(112,84,132,0.26)', density: 42000, min: 12, max: 28, rotate: false }
+    // count per data-shape; `mix` weights the per-bird shape pool (here ~25% paws)
+    const CFG = {
+      bird: { density: 26000, min: 16, max: 44, pool: ['bird'] },
+      gull: { density: 27000, min: 16, max: 40, pool: ['gull'] },
+      paw:  { density: 42000, min: 12, max: 28, pool: ['paw'] },
+      mix:  { density: 24000, min: 20, max: 46, pool: ['gull', 'gull', 'gull', 'paw'] }
     };
 
     function setupFlock(canvas) {
       const name = canvas.dataset.shape || 'bird';
-      const drawShape = SHAPES[name] || SHAPES.bird;
-      const st = STYLE[name] || STYLE.bird;
+      const cfg = CFG[name] || CFG.bird;
       const ctx = canvas.getContext('2d');
       const section = canvas.closest('section');
       let W = 0, H = 0, birds = [], raf = null;
@@ -1200,14 +1204,15 @@
       function resize() {
         W = canvas.width = section.clientWidth;
         H = canvas.height = section.clientHeight;
-        const n = Math.max(st.min, Math.min(st.max, Math.round(W * H / st.density)));
+        const n = Math.max(cfg.min, Math.min(cfg.max, Math.round(W * H / cfg.density)));
         birds = [];
         for (let i = 0; i < n; i++) {
           const a = -0.5 + Math.random();
           birds.push({
             x: Math.random() * W, y: Math.random() * H * 0.9,
             vx: 0.9 + Math.random() * 0.6, vy: Math.sin(a) * 0.5,
-            flap: Math.random() * TAU, size: 0.85 + Math.random() * 0.6
+            flap: Math.random() * TAU, size: 0.85 + Math.random() * 0.6,
+            shape: cfg.pool[Math.floor(Math.random() * cfg.pool.length)]
           });
         }
       }
@@ -1243,9 +1248,8 @@
 
       function frame() {
         ctx.clearRect(0, 0, W, H);
-        if (st.mode === 'fill') { ctx.fillStyle = st.color; }
-        else { ctx.strokeStyle = st.color; ctx.lineWidth = st.width; ctx.lineJoin = 'round'; ctx.lineCap = 'round'; }
-        for (const b of birds) drawShape(ctx, b);
+        ctx.lineJoin = 'round'; ctx.lineCap = 'round';
+        for (const b of birds) SHAPES[b.shape](ctx, b);
       }
 
       function loop() { step(); frame(); raf = requestAnimationFrame(loop); }
@@ -1258,6 +1262,80 @@
     }
 
     document.querySelectorAll('canvas.birds').forEach(setupFlock);
+  })();
+
+  // ---------- Floating book pages behind "Our story" ----------
+  (function () {
+    const canvas = document.getElementById('story-pages');
+    if (!canvas) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const TAU = Math.PI * 2;
+    const ctx = canvas.getContext('2d');
+    const section = canvas.closest('section');
+    let W = 0, H = 0, pages = [], raf = null;
+
+    function makePage(seed) {
+      const w = 24 + Math.random() * 30;
+      return {
+        x: Math.random() * W,
+        y: seed ? Math.random() * H : H + 30 + Math.random() * 120,
+        w, h: w * 1.34,
+        rot: (Math.random() - 0.5) * 0.7,
+        vrot: (Math.random() - 0.5) * 0.0045,
+        vy: -(0.22 + Math.random() * 0.4),
+        swayA: 8 + Math.random() * 20,
+        swayS: 0.004 + Math.random() * 0.007,
+        swayP: Math.random() * TAU,
+        alpha: 0.45 + Math.random() * 0.4
+      };
+    }
+    function resize() {
+      W = canvas.width = section.clientWidth;
+      H = canvas.height = section.clientHeight;
+      const n = Math.max(9, Math.min(20, Math.round(W * H / 62000)));
+      pages = []; for (let i = 0; i < n; i++) pages.push(makePage(true));
+    }
+    function rrect(x, y, w, h, r) {
+      ctx.beginPath();
+      ctx.moveTo(x + r, y); ctx.arcTo(x + w, y, x + w, y + h, r); ctx.arcTo(x + w, y + h, x, y + h, r);
+      ctx.arcTo(x, y + h, x, y, r); ctx.arcTo(x, y, x + w, y, r); ctx.closePath();
+    }
+    function drawPage(p) {
+      ctx.save();
+      ctx.globalAlpha = p.alpha;
+      ctx.translate(p.x + Math.sin(p.swayP) * p.swayA, p.y);
+      ctx.rotate(p.rot);
+      const w = p.w, h = p.h;
+      ctx.fillStyle = 'rgba(255,251,244,0.95)';
+      ctx.shadowColor = 'rgba(90,70,130,0.22)'; ctx.shadowBlur = 9; ctx.shadowOffsetY = 4;
+      rrect(-w / 2, -h / 2, w, h, 3); ctx.fill();
+      ctx.shadowBlur = 0; ctx.shadowOffsetY = 0;
+      ctx.strokeStyle = 'rgba(120,100,155,0.4)'; ctx.lineWidth = 1;
+      const pad = w * 0.16, rows = Math.max(3, Math.round(h / 7));
+      ctx.beginPath();
+      for (let i = 1; i < rows; i++) {
+        const yy = -h / 2 + i * (h / rows);
+        const short = (i % 4 === 0) ? w * 0.42 : (i % 3 === 0 ? w * 0.28 : 0);
+        ctx.moveTo(-w / 2 + pad, yy); ctx.lineTo(w / 2 - pad - short, yy);
+      }
+      ctx.stroke();
+      ctx.restore();
+    }
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      for (const p of pages) {
+        drawPage(p);
+        p.y += p.vy; p.rot += p.vrot; p.swayP += p.swayS;
+        if (p.y < -p.h - 20) Object.assign(p, makePage(false));
+      }
+      raf = requestAnimationFrame(loop);
+    }
+    resize();
+    window.addEventListener('resize', resize);
+    new IntersectionObserver((e) => {
+      if (e[0].isIntersecting) { if (!raf) loop(); }
+      else if (raf) { cancelAnimationFrame(raf); raf = null; }
+    }, { threshold: 0.02 }).observe(section);
   })();
 
   // ---------- Ambient lightning storm behind the note ----------
