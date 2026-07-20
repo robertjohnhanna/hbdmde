@@ -27,8 +27,7 @@
     --sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; background: #0a0713; }
-  @media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; } }
+  html { scroll-behavior: smooth; background: #0a0713; }
   body {
     font-family: var(--sans);
     background: linear-gradient(165deg, #fde8ef 0%, #f5e6ff 46%, #e8f3ff 100%);
@@ -47,7 +46,7 @@
   .hero {
     position: relative;
     min-height: 100vh;
-    min-height: 100dvh;   /* exactly the visible viewport, incl. mobile toolbar */
+    min-height: 100svh;   /* full-screen hero, stable (doesn't resize with the toolbar) */
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -123,13 +122,8 @@
 
   /* ---------- Sections ---------- */
   section {
-    max-width: 940px; margin: 0 auto; padding: 3.5rem 1.5rem;
-    min-height: 100vh;
-    min-height: 100dvh;  /* match the visible viewport so the next section can't peek through */
-    display: flex; flex-direction: column; justify-content: safe center;
-    scroll-snap-align: start;
+    max-width: 940px; margin: 0 auto; padding: 4.5rem 1.5rem;
   }
-  .hero { scroll-snap-align: start; }
   section > h2:first-child, section > .inner { width: 100%; }
   h2 {
     font-family: var(--serif);
@@ -717,12 +711,6 @@
     .stat-card { padding: 1rem .9rem; }
     .stat-card .value { font-size: 2rem; }
   }
-
-  /* Landscape phones / very short screens: let sections scroll instead of snapping */
-  @media (max-height: 560px) {
-    html { scroll-snap-type: none; }
-    section { min-height: 0; }
-  }
 </style>
 </head>
 <body>
@@ -1168,21 +1156,26 @@
     sky.appendChild(frag);
   })();
 
-  // ---------- Tint the iOS status bar to match the section on screen ----------
+  // ---------- Tint the iOS status bar to match whatever's under it ----------
   (function () {
     const meta = document.getElementById('meta-theme');
-    if (!meta || !('IntersectionObserver' in window)) return;
+    if (!meta) return;
     function colorFor(el) {
+      if (!el) return '#e9e6f0';
       if (el.matches('.cosmos-wrap')) return '#201a3c';   // chart (dark indigo)
       if (el.matches('.storm-section')) return '#0a0713'; // note (near-black)
-      if (el.matches('#story')) return '#ece7fa';         // story (light lavender)
-      if (el.matches('.flock')) return '#f3ebfb';         // stats (light lavender)
-      return '#e9e6f0';                                   // hero / default (light)
+      return '#efe9f4';                                   // hero + light sections
     }
-    const io = new IntersectionObserver((entries) => {
-      entries.forEach(e => { if (e.isIntersecting) meta.setAttribute('content', colorFor(e.target)); });
-    }, { threshold: 0.5 });
-    document.querySelectorAll('.content > section, .content > header').forEach(el => io.observe(el));
+    let ticking = false;
+    function update() {
+      ticking = false;
+      const el = document.elementFromPoint(Math.floor(window.innerWidth / 2), 6);
+      meta.setAttribute('content', colorFor(el && el.closest('header, section')));
+    }
+    window.addEventListener('scroll', () => {
+      if (!ticking) { ticking = true; requestAnimationFrame(update); }
+    }, { passive: true });
+    update();
   })();
 
   // ---------- Scroll reveal ----------
