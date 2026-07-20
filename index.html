@@ -26,7 +26,7 @@
     --sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
   @media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; } }
   body {
     font-family: var(--sans);
@@ -46,7 +46,6 @@
   .hero {
     position: relative;
     min-height: 100vh;
-    min-height: 100dvh;
     display: flex;
     flex-direction: column;
     align-items: center;
@@ -122,8 +121,7 @@
   /* ---------- Sections ---------- */
   section {
     max-width: 940px; margin: 0 auto; padding: 3.5rem 1.5rem;
-    min-height: 100vh;
-    min-height: 100dvh;
+    min-height: 100vh;   /* stable height (does not resize as the mobile toolbar hides) */
     display: flex; flex-direction: column; justify-content: safe center;
     scroll-snap-align: start;
   }
@@ -866,7 +864,7 @@
           <img src="img/tao.jpg" alt="Tao, the border collie" loading="lazy">
         </div>
         <h3>Tao</h3>
-        <div class="breed">Border Collie &bull; b. 2025 &bull; the puppy</div>
+        <div class="breed">Border Collie</div>
         <p>&ldquo;Happy birthday, Mom! I rounded everyone up so we could say it all at once. You're my favorite human.&rdquo;</p>
       </div>
       <div class="dog-card">
@@ -875,7 +873,7 @@
           <img src="img/raven.jpg" alt="Raven, the German shepherd" loading="lazy">
         </div>
         <h3>Raven</h3>
-        <div class="breed">German Shepherd &bull; b. 2021 &bull; head of security</div>
+        <div class="breed">German Shepherd</div>
         <p>&ldquo;Happy birthday, Mom. Perimeter's secure, the day is all yours. I love you the most &mdash; don't tell Tao.&rdquo;</p>
       </div>
     </div>
@@ -893,8 +891,6 @@
       <button class="cake-btn" id="open-coupon">🎁 Open your gift</button>
     </div>
   </section>
-
-  <footer>For Maddie &bull; July 25</footer>
 </div>
 
 <!-- MASSAGE COUPON -->
