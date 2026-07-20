@@ -537,6 +537,10 @@
   .note .note-open em { font-style: italic; color: var(--rose); }
   .note .note-hb { font-weight: 600; color: var(--ink); }
   .note .signoff { font-size: 1.3rem; font-weight: 700; color: var(--rose); }
+  .paw-sigs { display: flex; align-items: flex-end; justify-content: center; gap: .7rem; margin-top: .7rem; }
+  .paw-sigs .paw { fill: var(--rose); opacity: .8; }
+  .paw-sigs .paw-lg { width: 34px; transform: rotate(-14deg); }
+  .paw-sigs .paw-sm { width: 22px; transform: rotate(11deg); opacity: .6; }
 
   .cake-btn {
     display: inline-block;
@@ -908,8 +912,12 @@
       <p class="note-open">Maddie &mdash; <em>you're my favorite person.</em></p>
       <p>Two dogs, no kids, a lot of good food, adventure, and a lot of ordinary days I wouldn't trade for anything.</p>
       <p>We're each other's best friend and we don't take that for granted &mdash; we actually appreciate each other. After twenty-some years, that still feels like the whole point.</p>
-      <p class="note-hb">Happy birthday, Maddie! I love you!</p>
-      <div class="signoff">&mdash; Love, Bob</div>
+      <p class="note-hb">Happy birthday, Maddie!<br>We love you!</p>
+      <div class="signoff">&mdash; Love, Bob/Raven/Tao</div>
+      <div class="paw-sigs" aria-hidden="true">
+        <svg class="paw paw-lg" viewBox="0 0 100 100"><ellipse cx="50" cy="66" rx="22" ry="18"/><circle cx="22" cy="43" r="9"/><circle cx="40" cy="28" r="10"/><circle cx="60" cy="28" r="10"/><circle cx="78" cy="43" r="9"/></svg>
+        <svg class="paw paw-sm" viewBox="0 0 100 100"><ellipse cx="50" cy="66" rx="22" ry="18"/><circle cx="22" cy="43" r="9"/><circle cx="40" cy="28" r="10"/><circle cx="60" cy="28" r="10"/><circle cx="78" cy="43" r="9"/></svg>
+      </div>
       <br>
       <button class="cake-btn" id="open-coupon">🎁 Open your gift</button>
     </div>
