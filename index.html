@@ -551,7 +551,7 @@
     width: 100%;
     height: 100%;
     pointer-events: none;
-    z-index: 999;
+    z-index: 1100;   /* above the coupon overlay (1000) so confetti rains in front */
   }
 
   /* ---------- Floating hearts background ---------- */
@@ -576,6 +576,9 @@
   @media (max-width: 600px) {
     section { padding: 2.4rem 1.05rem; }
     h2 { font-size: 1.72rem; }
+
+    /* keep both faces in frame on tall portrait screens */
+    .hero-bg { background-position: 28% 30%; }
 
     /* hero compaction so the countdown stays one row */
     .hero { padding: 1.4rem 1rem 2.4rem; }
