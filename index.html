@@ -26,7 +26,7 @@
     --sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; background: #0a0713; }
   @media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; } }
   body {
     font-family: var(--sans);
@@ -432,7 +432,7 @@
   .cosmos-wrap {
     position: relative;
     max-width: none;
-    margin: 3rem 0;
+    margin: 0;
     padding: 4.5rem 1.5rem 5rem;
     background:
       radial-gradient(1200px 600px at 20% 0%, #2a2450 0%, rgba(42,36,80,0) 60%),
@@ -610,6 +610,10 @@
   }
   .content { position: relative; z-index: 1; }
 
+  /* On "Our story", the only background is the drifting pages/books */
+  body.story-view .heart-bg,
+  body.story-view .butterfly-bg { display: none; }
+
   /* ---------- Mobile: fit each section to one screen ---------- */
   @media (max-width: 600px) {
     section { padding: 2.4rem 1.05rem; }
@@ -725,8 +729,6 @@
   <!-- HERO -->
   <header class="hero">
     <div class="hero-bg" role="img" aria-label="Maddie and her husband on the beach in Jamaica"></div>
-    <div class="eyebrow">July 25</div>
-    <div class="balloons">🎈🎉🎈</div>
     <h1>Happy Birthday,<br><em>Maddie</em></h1>
     <p class="subtitle">It's your birthday. I built you a website instead of buying a card.</p>
     <div class="countdown-title" id="countdown-title">Counting down to your moment</div>
@@ -1076,6 +1078,29 @@
   draw();
   burst(180);
 
+  // ---------- Continuous confetti while the hero is on screen ----------
+  const heroEl = document.querySelector('.hero');
+  let heroOnScreen = true;
+  if (heroEl && 'IntersectionObserver' in window) {
+    new IntersectionObserver((e) => { heroOnScreen = e[0].isIntersecting; }, { threshold: 0 }).observe(heroEl);
+  }
+  function rainTop(count) {
+    for (let i = 0; i < count; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * 60,
+        w: 6 + Math.random() * 8,
+        h: 8 + Math.random() * 10,
+        vy: 2 + Math.random() * 3.5,
+        vx: -1.5 + Math.random() * 3,
+        rot: Math.random() * Math.PI * 2,
+        vr: -0.15 + Math.random() * 0.3,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)]
+      });
+    }
+  }
+  setInterval(() => { if (heroOnScreen && !document.hidden) rainTop(4); }, 130);
+
   // ---------- Massage coupon ----------
   const couponOverlay = document.getElementById('coupon');
   const openCouponBtn = document.getElementById('open-coupon');
@@ -1269,6 +1294,15 @@
     document.querySelectorAll('canvas.birds').forEach(setupFlock);
   })();
 
+  // ---------- Suppress the global hearts/butterflies over "Our story" ----------
+  (function () {
+    const story = document.getElementById('story');
+    if (!story || !('IntersectionObserver' in window)) return;
+    new IntersectionObserver((e) => {
+      document.body.classList.toggle('story-view', e[0].isIntersecting);
+    }, { threshold: 0.35 }).observe(story);
+  })();
+
   // ---------- Floating book pages behind "Our story" ----------
   (function () {
     const canvas = document.getElementById('story-pages');
@@ -1297,7 +1331,7 @@
     function resize() {
       W = canvas.width = section.clientWidth;
       H = canvas.height = section.clientHeight;
-      const n = Math.max(9, Math.min(20, Math.round(W * H / 62000)));
+      const n = Math.max(18, Math.min(40, Math.round(W * H / 31000)));
       pages = []; for (let i = 0; i < n; i++) pages.push(makePage(true));
     }
     function rrect(x, y, w, h, r) {
