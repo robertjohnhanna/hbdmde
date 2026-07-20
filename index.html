@@ -25,7 +25,8 @@
     --sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; }
+  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  @media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; } }
   body {
     font-family: var(--sans);
     background: linear-gradient(165deg, #fde8ef 0%, #f5e6ff 46%, #e8f3ff 100%);
@@ -118,7 +119,14 @@
   @keyframes bob { 0%,100% { transform: translate(-50%, 0); } 50% { transform: translate(-50%, 8px); } }
 
   /* ---------- Sections ---------- */
-  section { max-width: 940px; margin: 0 auto; padding: 5rem 1.5rem; }
+  section {
+    max-width: 940px; margin: 0 auto; padding: 3.5rem 1.5rem;
+    min-height: 100svh;
+    display: flex; flex-direction: column; justify-content: safe center;
+    scroll-snap-align: start;
+  }
+  .hero { scroll-snap-align: start; }
+  section > h2:first-child, section > .inner { width: 100%; }
   h2 {
     font-family: var(--serif);
     font-weight: 800;
@@ -280,7 +288,7 @@
   .philosophy h2 span { color: #6f8f6a; }
   .philosophy .divider { background: linear-gradient(90deg, #7fa07a, #b9a06a); }
   .pillars { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.2rem; margin: 0 auto 3rem; }
-  @media (max-width: 680px) { .pillars { grid-template-columns: 1fr; } }
+  @media (max-width: 680px) { .pillars { gap: .6rem; } .pillar { padding: 1.1rem .6rem; } }
   .pillar {
     background: #fff; border: 1px solid rgba(90,80,60,.1); border-radius: 20px;
     padding: 2rem 1.4rem; text-align: center; box-shadow: 0 14px 34px rgba(80,80,50,.08);
@@ -486,6 +494,113 @@
     100% { transform: translateY(-110vh) rotate(40deg); opacity: 0; }
   }
   .content { position: relative; z-index: 1; }
+
+  /* ---------- Mobile: fit each section to one screen ---------- */
+  @media (max-width: 600px) {
+    section { padding: 2.4rem 1.05rem; }
+    h2 { font-size: 1.72rem; }
+
+    /* hero compaction so the countdown stays one row */
+    .hero { padding: 1.4rem 1rem 2.4rem; }
+    .hero .balloons { font-size: 1.6rem; }
+    .hero h1 { margin: .5rem 0 .6rem; }
+    .countdown { gap: .45rem; margin-top: 1.5rem; }
+    .countdown .unit { min-width: 62px; padding: .7rem .45rem; border-radius: 13px; }
+    .countdown .num { font-size: 1.65rem; }
+    .countdown .label { font-size: .58rem; letter-spacing: .08em; }
+    .countdown-title { margin-top: 1.4rem; font-size: .74rem; letter-spacing: .15em; }
+
+    /* love note compaction */
+    .note { padding: 1.6rem 1.3rem; border-radius: 22px; }
+    .note p { font-size: .96rem; line-height: 1.58; margin-bottom: 1rem; }
+    .note .signoff { font-size: 1.1rem; }
+    .cake-btn { font-size: 1rem; padding: .75rem 1.6rem; margin-top: 1rem; }
+    .section-lead { margin-bottom: 1.2rem; font-size: .9rem; }
+    .divider { margin: .6rem auto 1.2rem; }
+
+    /* stats 2x2 */
+    .stats { grid-template-columns: 1fr 1fr; gap: .7rem; }
+    .stat-card { padding: 1rem .6rem; border-radius: 16px; }
+    .stat-card .emoji { font-size: 1.7rem; }
+    .stat-card .value { font-size: 1.6rem; }
+    .stat-card .desc { font-size: .78rem; line-height: 1.35; }
+
+    /* timeline compact */
+    .timeline { padding-left: 1.6rem; }
+    .event { margin-bottom: 1.15rem; }
+    .event .year { font-size: .95rem; }
+    .event h3 { font-size: 1.1rem; }
+    .event p { font-size: .88rem; line-height: 1.45; }
+
+    /* passions 2-col */
+    .passions { grid-template-columns: 1fr 1fr; gap: .7rem; }
+    .passion { padding: 1rem .8rem; border-radius: 16px; }
+    .passion .icon { font-size: 1.8rem; }
+    .passion h3 { font-size: 1.02rem; margin: .35rem 0 .2rem; }
+    .passion p { font-size: .78rem; line-height: 1.4; }
+
+    /* dogs 2-col */
+    .dogs { grid-template-columns: 1fr 1fr; gap: .7rem; }
+    .dog-card { padding: .5rem .5rem .9rem; border-radius: 16px; }
+    .dog-photo { border-radius: 11px; }
+    .dog-card h3 { font-size: 1.2rem; margin: .5rem 0 .05rem; }
+    .dog-card .breed { font-size: .64rem; margin-bottom: .35rem; }
+    .dog-card p { font-size: .74rem; line-height: 1.38; padding: 0; }
+
+    /* philosophy compact */
+    .philosophy { padding: 2.4rem 1.05rem; }
+    .pillars { grid-template-columns: repeat(3, 1fr); gap: .45rem; margin-bottom: 1.4rem; }
+    .pillar { padding: .9rem .4rem; border-radius: 13px; }
+    .pillar .sym { font-size: 1.6rem; }
+    .pillar h3 { font-size: .96rem; }
+    .pillar .tao-tag { font-size: .55rem; letter-spacing: .06em; margin-bottom: 0; }
+    .pillar p { display: none; }
+    .mantra { margin-bottom: 0; }
+    .mantra li { padding: .6rem 0 .6rem 2.4rem; }
+    .mantra li::before { top: .6rem; width: 1.6rem; height: 1.6rem; font-size: .72rem; }
+    .mantra .line { font-size: .98rem; }
+    .mantra .tag { font-size: .6rem; margin-top: .2rem; }
+    .philosophy .summary { display: none; }
+
+    /* gallery */
+    .gallery { padding: 2.4rem 1.05rem; }
+    .artframe { max-width: 300px; padding: 9px; }
+    .gallery figcaption { margin-top: 1rem; font-size: .82rem; }
+
+    /* favorite */
+    .favorite { padding: 3.5rem 1.2rem; }
+
+    /* chart: keep only the essentials on mobile */
+    .cosmos-wrap { padding: 2.4rem 1.05rem; }
+    .cosmos-sub { margin-bottom: 1.4rem; font-size: .9rem; }
+    .chart-grid { grid-template-columns: 1fr; gap: .4rem; }
+    .constellation { display: none; }
+    .zodiac .traits, .zodiac .blurb { display: none; }
+    .zodiac .glyph { font-size: 3rem; }
+    .zodiac .sign { font-size: 1.5rem; }
+    .zodiac .rulers { margin-bottom: .8rem; }
+    .big-three { margin-top: .8rem; gap: .45rem; max-width: 320px; }
+    .bt-card { padding: .65rem .3rem; }
+    .double-leo { margin-top: .9rem; font-size: .82rem; }
+  }
+
+  /* Small phones (iPhone SE class): drop the extras so each section still fits */
+  @media (max-width: 600px) and (max-height: 700px) {
+    .hero .balloons { display: none; }
+    .hero h1 { font-size: 2.5rem; margin: .3rem 0 .5rem; }
+    .hero .subtitle { font-size: .94rem; }
+    .countdown { margin-top: 1.2rem; }
+    .countdown-title { margin-top: 1.1rem; }
+    .passion p { display: none; }
+    .passion h3 { margin-bottom: 0; }
+    .note p { font-size: .9rem; margin-bottom: .8rem; }
+  }
+
+  /* Landscape phones / very short screens: let sections scroll instead of snapping */
+  @media (max-height: 560px) {
+    html { scroll-snap-type: none; }
+    section { min-height: 0; }
+  }
 </style>
 </head>
 <body>
@@ -543,32 +658,32 @@
       <div class="event">
         <div class="year">July 25, 1987</div>
         <h3>Born</h3>
-        <p>1:29 in the afternoon, Janesville, Wisconsin. Leo sun, Leo moon &mdash; which, if you know her, tracks.</p>
+        <p>1:29 p.m., Janesville, WI. Leo sun, Leo moon.</p>
       </div>
       <div class="event">
         <div class="year">2004</div>
         <h3>We met</h3>
-        <p>Twenty-some years ago now. Neither of us had any idea what we were starting.</p>
+        <p>Neither of us knew what we were starting.</p>
       </div>
       <div class="event">
         <div class="year">The proposal</div>
         <h3>Parfrey's Glen</h3>
-        <p>Down in the gorge at Parfrey's Glen, back in Wisconsin. I asked; she said yes.</p>
+        <p>In the gorge, back in Wisconsin. She said yes.</p>
       </div>
       <div class="event">
-        <div class="year">November 5, 2015</div>
+        <div class="year">Nov 5, 2015</div>
         <h3>Married in Jamaica</h3>
-        <p>On a beach, no kids to wrangle, no second thoughts. Easiest decision I've made.</p>
+        <p>On a beach. Easiest decision I've made.</p>
       </div>
       <div class="event">
         <div class="year">2026</div>
-        <h3>On the road, then Florida</h3>
-        <p>Spent a stretch driving around the country, then planted ourselves in Florida this year.</p>
+        <h3>Then Florida</h3>
+        <p>Traveled the country, then planted here.</p>
       </div>
       <div class="event">
         <div class="year">Today</div>
         <h3>Now</h3>
-        <p>Two decades, one marriage, two dogs later. Still choosing you, still not bored.</p>
+        <p>Two decades, two dogs. Still choosing you.</p>
       </div>
     </div>
   </section>
@@ -620,7 +735,7 @@
     <div class="inner">
       <h2>Her <span>art</span></h2>
       <div class="divider"></div>
-      <p class="section-lead">She paints &mdash; pours color onto canvas and lets it find its own shapes. This is one of hers.</p>
+      <p class="section-lead">She paints. This is one of hers.</p>
       <figure>
         <div class="artframe">
           <img src="img/painting.jpg" alt="An abstract acrylic pour painting by Maddie, in deep blues, teal, and copper" loading="lazy">
@@ -635,7 +750,7 @@
     <div class="inner">
       <h2>What we <span>live by</span></h2>
       <div class="divider"></div>
-      <p class="section-lead">Three ideas that shape how we try to live &mdash; harmony, self-mastery, and cutting away the excess.</p>
+      <p class="section-lead">Harmony, self-mastery, and cutting away the excess.</p>
 
       <div class="pillars">
         <div class="pillar">
@@ -677,7 +792,7 @@
         </li>
       </ol>
 
-      <p class="summary">All three point the same way: <b>simplicity, self-mastery, and focus on what matters</b>. Taoism gets there through harmony with nature, Stoicism through rational virtue, and Minimalism through the reduction of excess.</p>
+      <p class="summary">All three point the same way: <b>keep only what matters</b>.</p>
     </div>
   </section>
 
@@ -758,7 +873,7 @@
             <span>Generous</span>
             <span>Magnetic</span>
           </div>
-          <p class="blurb">Sun and Moon both in Leo, Scorpio on the ascendant. Warm and loud on the surface, harder to read underneath. Regulus &mdash; the star that marks the lion's heart &mdash; sat almost exactly on her Sun the afternoon she was born. Read into that whatever you like.</p>
+          <p class="blurb">Sun and Moon in Leo, Scorpio rising. Warm and loud up top, harder to read underneath.</p>
 
           <div class="big-three">
             <div class="bt-card">
