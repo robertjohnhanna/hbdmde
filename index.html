@@ -610,7 +610,8 @@
   }
   /* ---------- Flip-card deck: each section is a full-screen static card ---------- */
   .content {
-    position: fixed; inset: 0; z-index: 1;
+    position: fixed; top: 0; left: 0; right: 0; z-index: 1;
+    height: 100vh; height: 100dvh;   /* the visible viewport, so cards center above the toolbar */
     overflow: hidden;
     perspective: 2000px;
     background: #0a0713;
@@ -728,6 +729,12 @@
     .zodiac .rulers { margin-bottom: .7rem; font-size: .78rem; }
     .big-three { margin-top: .7rem; gap: .45rem; max-width: 320px; }
     .bt-card { padding: .6rem .3rem; }
+  }
+
+  /* Touch devices have no real hover — a tap otherwise leaves a card stuck lifted */
+  @media (hover: none) {
+    .stat-card:hover, .dog-card:hover, .passion:hover, .pillar:hover, .cake-btn:hover { transform: none; }
+    .dog-card:hover .dog-photo img { transform: none; filter: grayscale(100%) contrast(1.04); }
   }
 
   /* Small phones (iPhone SE class): drop the extras so each section still fits */
