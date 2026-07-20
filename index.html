@@ -205,6 +205,46 @@
   .dog-card .breed { font-weight: 600; color: #8a819e; margin-bottom: .7rem; font-size: .92rem; letter-spacing: .01em; }
   .dog-card p { color: #6b6485; line-height: 1.65; padding: 0 .4rem; font-size: .98rem; }
 
+  /* ---------- Passions / Favorite things ---------- */
+  .passions { display: grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 1.3rem; }
+  .passion {
+    background: rgba(255, 255, 255, .78);
+    border: 1px solid rgba(184, 107, 255, .12);
+    border-radius: 22px;
+    padding: 1.8rem 1.4rem;
+    box-shadow: 0 10px 30px rgba(120, 90, 200, .1);
+    transition: transform .3s cubic-bezier(.2,1,.3,1), box-shadow .3s ease;
+  }
+  .passion:hover { transform: translateY(-6px); box-shadow: 0 18px 40px rgba(184, 107, 255, .2); }
+  .passion .icon {
+    font-size: 2.4rem;
+    display: inline-block;
+    transition: transform .4s ease;
+  }
+  .passion:hover .icon { transform: scale(1.15) rotate(-6deg); }
+  .passion h3 { font-size: 1.25rem; margin: .6rem 0 .35rem; color: #7a4fd0; }
+  .passion p { color: #6b6485; line-height: 1.6; font-size: .96rem; }
+
+  /* ---------- Floating butterflies ---------- */
+  .butterfly-bg {
+    position: fixed;
+    top: -3rem;
+    font-size: 1.5rem;
+    opacity: 0;
+    pointer-events: none;
+    z-index: 0;
+    animation: flutter linear infinite;
+  }
+  @keyframes flutter {
+    0%   { transform: translate(0, 0) rotate(0deg); opacity: 0; }
+    10%  { opacity: .8; }
+    25%  { transform: translate(6vw, 22vh) rotate(12deg); }
+    50%  { transform: translate(-4vw, 50vh) rotate(-10deg); }
+    75%  { transform: translate(7vw, 74vh) rotate(10deg); }
+    90%  { opacity: .7; }
+    100% { transform: translate(-3vw, 108vh) rotate(-8deg); opacity: 0; }
+  }
+
   /* ---------- Cosmos / Star chart ---------- */
   .cosmos-wrap {
     position: relative;
@@ -280,6 +320,19 @@
     color: #efe9ff;
   }
   .zodiac .blurb { color: #d8d2f0; line-height: 1.7; font-size: .98rem; max-width: 340px; margin: 0 auto; }
+  .big-three { display: grid; grid-template-columns: repeat(3, 1fr); gap: .7rem; margin: 1.6rem auto 0; max-width: 360px; }
+  .bt-card {
+    background: rgba(255,255,255,.07);
+    border: 1px solid rgba(255,255,255,.13);
+    border-radius: 16px;
+    padding: .85rem .4rem;
+  }
+  .bt-glyph { font-size: 1.5rem; line-height: 1; }
+  .bt-sign { font-weight: 800; color: #fff; margin: .3rem 0 .05rem; font-size: 1rem; }
+  .bt-label { font-size: .7rem; text-transform: uppercase; letter-spacing: .12em; color: var(--gold); }
+  .bt-desc { font-size: .68rem; color: #b8b0d8; margin-top: .35rem; line-height: 1.35; }
+  .double-leo { color: #efe9ff; font-size: .92rem; margin: 1.3rem auto 0; max-width: 360px; line-height: 1.6; }
+  .double-leo b { color: var(--gold); }
 
   /* ---------- Love note ---------- */
   .note {
@@ -360,7 +413,7 @@
     <div class="balloons">🎈🎉🎈</div>
     <h1>Happy Birthday,<br>Maddie!</h1>
     <p class="subtitle">July 25th &mdash; the best day of the year 💖</p>
-    <div class="countdown-title" id="countdown-title">Counting down to the big day</div>
+    <div class="countdown-title" id="countdown-title">Counting down to your moment &mdash; 1:29 PM, July 25</div>
     <div class="countdown" id="countdown">
       <div class="unit"><div class="num" id="cd-days">–</div><div class="label">Days</div></div>
       <div class="unit"><div class="num" id="cd-hours">–</div><div class="label">Hours</div></div>
@@ -424,6 +477,43 @@
     </div>
   </section>
 
+  <!-- PASSIONS -->
+  <section>
+    <h2>A few of her <span>favorite things</span> 🦋</h2>
+    <div class="passions">
+      <div class="passion">
+        <span class="icon">☸️</span>
+        <h3>Buddhism</h3>
+        <p>A calm, mindful heart and a gentle, thoughtful way of moving through the world.</p>
+      </div>
+      <div class="passion">
+        <span class="icon">📖</span>
+        <h3>Reading</h3>
+        <p>Forever lost in a good book &mdash; and already three chapters into the next one.</p>
+      </div>
+      <div class="passion">
+        <span class="icon">🧘‍♀️</span>
+        <h3>Yoga</h3>
+        <p>Breath, balance, and finding her center on the mat.</p>
+      </div>
+      <div class="passion">
+        <span class="icon">🎨</span>
+        <h3>Art &amp; Painting</h3>
+        <p>Turning blank canvases into something colorful and beautiful.</p>
+      </div>
+      <div class="passion">
+        <span class="icon">🌿</span>
+        <h3>Nature</h3>
+        <p>Happiest outdoors &mdash; under open skies and among the trees.</p>
+      </div>
+      <div class="passion">
+        <span class="icon">🌸</span>
+        <h3>Butterflies &amp; Flowers</h3>
+        <p>Drawn to every fluttering butterfly and blooming flower she passes.</p>
+      </div>
+    </div>
+  </section>
+
   <!-- DOGS -->
   <section>
     <h2>Love from <span>the fur kids</span> 🐾</h2>
@@ -454,7 +544,7 @@
     <div class="cosmos-stars" id="cosmos-stars"></div>
     <div class="cosmos-inner">
       <h2>Written in the <span>stars</span> ✨</h2>
-      <p class="cosmos-sub">Born <b>July 25, 1987</b> at <b>1:29 PM</b> &mdash; under the sign of the Lion 🦁</p>
+      <p class="cosmos-sub">Born <b>July 25, 1987</b> at <b>1:29 PM</b> in <b>Janesville, WI</b> &mdash; under the sign of the Lion 🦁</p>
       <div class="chart-grid">
         <div class="constellation">
           <svg viewBox="0 0 560 360" role="img" aria-label="Leo constellation">
@@ -502,6 +592,28 @@
             <span>Magnetic</span>
           </div>
           <p class="blurb">Just like her star sign, Maddie lights up every room she walks into. A Leo through and through &mdash; big-hearted, fiercely loyal, and born to shine. Regulus, the brightest star in Leo, sits right at the lion's heart... which feels about right. ✨</p>
+
+          <div class="big-three">
+            <div class="bt-card">
+              <div class="bt-glyph">☀️</div>
+              <div class="bt-sign">Leo</div>
+              <div class="bt-label">Sun</div>
+              <div class="bt-desc">Her core &mdash; radiant &amp; warm</div>
+            </div>
+            <div class="bt-card">
+              <div class="bt-glyph">🌙</div>
+              <div class="bt-sign">Leo</div>
+              <div class="bt-label">Moon</div>
+              <div class="bt-desc">Her heart &mdash; loving &amp; loyal</div>
+            </div>
+            <div class="bt-card">
+              <div class="bt-glyph">⬆️</div>
+              <div class="bt-sign">Scorpio</div>
+              <div class="bt-label">Rising</div>
+              <div class="bt-desc">Her aura &mdash; deep &amp; magnetic</div>
+            </div>
+          </div>
+          <p class="double-leo">A rare <b>double Leo</b> &mdash; born with both the Sun <i>and</i> the Moon in Leo. Sunshine all the way through. 🌟</p>
         </div>
       </div>
     </div>
@@ -548,22 +660,28 @@
     new Date().getFullYear() - TOGETHER_YEAR;
   document.getElementById('stat-married').textContent = yearsSince(WEDDING);
 
-  // ---------- Countdown ----------
+  // ---------- Countdown (to her exact birth moment: 1:29 PM) ----------
+  const BIRTH_HOUR = 13, BIRTH_MIN = 29;   // 1:29 PM
+  function birthMoment(year) {
+    return new Date(year, BIRTH.month, BIRTH.day, BIRTH_HOUR, BIRTH_MIN, 0);
+  }
   function nextBirthday() {
     const now = new Date();
-    let bday = new Date(now.getFullYear(), BIRTH.month, BIRTH.day);
-    const endOfBday = new Date(now.getFullYear(), BIRTH.month, BIRTH.day + 1);
-    if (now >= endOfBday) bday = new Date(now.getFullYear() + 1, BIRTH.month, BIRTH.day);
-    return bday;
+    let m = birthMoment(now.getFullYear());
+    if (now >= m) m = birthMoment(now.getFullYear() + 1);
+    return m;
   }
-  function isBirthdayToday() {
+  function isBirthdayNow() {
+    // Celebrate from the exact minute she was born through the end of July 25
     const now = new Date();
-    return now.getMonth() === BIRTH.month && now.getDate() === BIRTH.day;
+    const moment = birthMoment(now.getFullYear());
+    const endOfDay = new Date(now.getFullYear(), BIRTH.month, BIRTH.day + 1, 0, 0, 0);
+    return now >= moment && now < endOfDay;
   }
   function tick() {
     const title = document.getElementById('countdown-title');
     const box = document.getElementById('countdown');
-    if (isBirthdayToday()) {
+    if (isBirthdayNow()) {
       title.textContent = "🎉 IT'S YOUR BIRTHDAY!! 🎉";
       title.style.color = '#ff65a3';
       title.style.fontWeight = '800';
@@ -642,6 +760,19 @@
     el.style.animationDelay = (Math.random() * 10) + 's';
     el.style.fontSize = (1 + Math.random() * 1.4) + 'rem';
     document.body.appendChild(el);
+  }
+
+  // ---------- Floating butterflies ----------
+  const FLIES = ['🦋', '🦋', '🌸', '🌼'];
+  for (let i = 0; i < 9; i++) {
+    const b = document.createElement('div');
+    b.className = 'butterfly-bg';
+    b.textContent = FLIES[i % FLIES.length];
+    b.style.left = (Math.random() * 90) + 'vw';
+    b.style.animationDuration = (14 + Math.random() * 12) + 's';
+    b.style.animationDelay = (Math.random() * 14) + 's';
+    b.style.fontSize = (1.1 + Math.random() * 1.3) + 'rem';
+    document.body.appendChild(b);
   }
 
   // ---------- Twinkling stars in the cosmos band ----------
