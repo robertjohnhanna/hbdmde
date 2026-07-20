@@ -770,6 +770,23 @@
     .stat-card { padding: 1rem .9rem; }
     .stat-card .value { font-size: 2rem; }
   }
+
+  /* ---------- Landscape (tablets/short windows): compact the numbers+dogs card so it fits
+     the visible band and stays vertically centered instead of overflowing off the bottom ---------- */
+  @media (orientation: landscape) and (min-width: 700px) and (max-height: 900px) {
+    section { padding: 1.2rem 1.5rem; }
+
+    .stats, .dogs.stats-dogs { max-width: 520px; }
+    .stats { gap: .7rem; }
+    .stat-card { padding: 1rem 1.2rem; }
+    .stat-card .value { font-size: 2.1rem; }
+    .stat-card .label { margin-top: .4rem; }
+
+    .dogs.stats-dogs { gap: .7rem; margin-top: .7rem; }
+    .stats-dogs .dog-card { padding: .5rem .5rem .8rem; }
+    .stats-dogs .dog-card h3 { font-size: 1.2rem; margin-top: .5rem; }
+    .stats-dogs .dog-card p { font-size: .78rem; line-height: 1.4; }
+  }
 </style>
 </head>
 <body>
@@ -872,7 +889,7 @@
 
   <!-- STATS + DOGS -->
   <section class="flock">
-    <canvas class="birds" data-shape="mix" aria-hidden="true"></canvas>
+    <canvas class="birds" data-shape="paw" aria-hidden="true"></canvas>
     <div class="stats">
       <div class="stat-card">
         <div class="value" id="stat-age">–</div>
@@ -1317,27 +1334,9 @@
     if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const TAU = Math.PI * 2;
 
-    // Per-shape drawing (local coords; birds/gulls point +x after rotation)
-    const SHAPES = {                                  // each sets its own style so a flock can mix shapes
-      bird(ctx, b) {                                  // sharp chevron
-        ctx.strokeStyle = 'rgba(74,62,110,0.34)'; ctx.lineWidth = 1.5;
-        const span = 3.4 + (Math.sin(b.flap) * 0.5 + 0.5) * 3.2;
-        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.atan2(b.vy, b.vx));
-        ctx.beginPath(); ctx.moveTo(-3, -span); ctx.lineTo(2.5, 0); ctx.lineTo(-3, span); ctx.stroke();
-        ctx.restore();
-      },
-      gull(ctx, b) {                                  // curved gull "M"
-        ctx.strokeStyle = 'rgba(74,62,110,0.32)'; ctx.lineWidth = 1.5;
-        const span = 3.6 + (Math.sin(b.flap) * 0.5 + 0.5) * 3.6;
-        ctx.save(); ctx.translate(b.x, b.y); ctx.rotate(Math.atan2(b.vy, b.vx));
-        ctx.beginPath();
-        ctx.moveTo(-3.4, -span);
-        ctx.quadraticCurveTo(0.5, -span * 0.28, 2.8, 0);
-        ctx.quadraticCurveTo(0.5, span * 0.28, -3.4, span);
-        ctx.stroke();
-        ctx.restore();
-      },
-      paw(ctx, b) {                                   // filled paw print (upright, drifts with the flock)
+    // Per-shape drawing (local coords)
+    const SHAPES = {                                  // paw prints only — they drift with the flock
+      paw(ctx, b) {                                   // filled paw print (upright)
         ctx.fillStyle = 'rgba(112,84,132,0.3)';
         const s = b.size * 1.15;
         ctx.save(); ctx.translate(b.x, b.y); ctx.scale(s, s);
@@ -1348,17 +1347,14 @@
         ctx.restore();
       }
     };
-    // count per data-shape; `mix` weights the per-bird shape pool (here ~25% paws)
+    // count per data-shape — a dense drift of paw prints
     const CFG = {
-      bird: { density: 26000, min: 16, max: 44, pool: ['bird'] },
-      gull: { density: 27000, min: 16, max: 40, pool: ['gull'] },
-      paw:  { density: 42000, min: 12, max: 28, pool: ['paw'] },
-      mix:  { density: 24000, min: 20, max: 46, pool: ['gull', 'gull', 'gull', 'paw'] }
+      paw: { density: 4000, min: 90, max: 300, pool: ['paw'] }
     };
 
     function setupFlock(canvas) {
       const name = canvas.dataset.shape || 'bird';
-      const cfg = CFG[name] || CFG.bird;
+      const cfg = CFG[name] || CFG.paw;
       const ctx = canvas.getContext('2d');
       const section = canvas.closest('section');
       let W = 0, H = 0, birds = [], raf = null;
