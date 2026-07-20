@@ -165,6 +165,9 @@
   .stat-card .meta { margin-top: .3rem; font-family: 'Courier New', ui-monospace, monospace; font-size: .74rem; color: #8a819e; }
 
   /* ---------- Timeline ---------- */
+  #story { position: relative; overflow: hidden; }
+  #story > h2, #story > .timeline { position: relative; z-index: 1; }
+  .birds { position: absolute; inset: 0; width: 100%; height: 100%; pointer-events: none; z-index: 0; }
   .timeline { position: relative; padding-left: 2rem; }
   .timeline::before {
     content: '';
@@ -819,6 +822,7 @@
 
   <!-- TIMELINE -->
   <section id="story">
+    <canvas class="birds" id="birds-canvas" aria-hidden="true"></canvas>
     <h2>Our <span>story</span></h2>
     <div class="timeline">
       <div class="event">
@@ -1112,6 +1116,97 @@
       });
     }, { threshold: 0.12, rootMargin: '0px 0px -8% 0px' });
     targets.forEach(el => io.observe(el));
+  })();
+
+  // ---------- Bird flock (boids) behind "Our story" ----------
+  (function () {
+    const canvas = document.getElementById('birds-canvas');
+    if (!canvas) return;
+    if (window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const ctx = canvas.getContext('2d');
+    const section = canvas.closest('section');
+    let W = 0, H = 0, birds = [], raf = null, visible = false;
+
+    function resize() {
+      W = canvas.width = section.clientWidth;
+      H = canvas.height = section.clientHeight;
+      const n = Math.max(16, Math.min(44, Math.round(W * H / 26000)));
+      birds = [];
+      for (let i = 0; i < n; i++) {
+        const a = -0.5 + Math.random();            // mostly heading rightward
+        birds.push({
+          x: Math.random() * W,
+          y: Math.random() * H * 0.85,
+          vx: 0.9 + Math.random() * 0.6,
+          vy: Math.sin(a) * 0.5,
+          flap: Math.random() * Math.PI * 2
+        });
+      }
+    }
+
+    function step() {
+      for (const b of birds) {
+        let cx = 0, cy = 0, avx = 0, avy = 0, sepx = 0, sepy = 0, count = 0;
+        for (const o of birds) {
+          if (o === b) continue;
+          const dx = o.x - b.x, dy = o.y - b.y, d2 = dx * dx + dy * dy;
+          if (d2 < 8100) {                          // within 90px
+            cx += o.x; cy += o.y; avx += o.vx; avy += o.vy; count++;
+            if (d2 < 700) { sepx -= dx; sepy -= dy; }  // within ~26px
+          }
+        }
+        let ax = 0.006, ay = 0;                     // gentle rightward drift
+        if (count) {
+          ax += ((cx / count) - b.x) * 0.0009 + ((avx / count) - b.vx) * 0.03;
+          ay += ((cy / count) - b.y) * 0.0009 + ((avy / count) - b.vy) * 0.03;
+        }
+        ax += sepx * 0.004; ay += sepy * 0.004;
+        ay += (H * 0.42 - b.y) * 0.00008;           // soft pull toward upper-middle
+        b.vx += ax; b.vy += ay;
+        const sp = Math.hypot(b.vx, b.vy), max = 1.8, min = 0.8;
+        if (sp > max) { b.vx = b.vx / sp * max; b.vy = b.vy / sp * max; }
+        else if (sp < min) { b.vx = b.vx / sp * min; b.vy = b.vy / sp * min; }
+        b.x += b.vx; b.y += b.vy; b.flap += 0.28;
+        const m = 24;
+        if (b.x > W + m) b.x = -m;
+        if (b.x < -m) b.x = W + m;
+        if (b.y > H + m) b.y = -m;
+        if (b.y < -m) b.y = H + m;
+      }
+    }
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.strokeStyle = 'rgba(74, 62, 110, 0.34)';
+      ctx.lineWidth = 1.5;
+      ctx.lineJoin = 'round';
+      ctx.lineCap = 'round';
+      for (const b of birds) {
+        const ang = Math.atan2(b.vy, b.vx);
+        const span = 3.4 + (Math.sin(b.flap) * 0.5 + 0.5) * 3.2;   // wings flap
+        ctx.save();
+        ctx.translate(b.x, b.y);
+        ctx.rotate(ang);
+        ctx.beginPath();
+        ctx.moveTo(-3, -span);
+        ctx.lineTo(2.5, 0);
+        ctx.lineTo(-3, span);
+        ctx.stroke();
+        ctx.restore();
+      }
+    }
+
+    function loop() { step(); draw(); raf = requestAnimationFrame(loop); }
+    function start() { if (!raf) loop(); }
+    function stop() { if (raf) { cancelAnimationFrame(raf); raf = null; } }
+
+    resize();
+    window.addEventListener('resize', resize);
+    // only animate while the section is on screen
+    new IntersectionObserver((entries) => {
+      visible = entries[0].isIntersecting;
+      if (visible) start(); else stop();
+    }, { threshold: 0.02 }).observe(section);
   })();
 </script>
 </body>
