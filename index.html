@@ -1279,11 +1279,15 @@
       }
       return { pts, branches, life: 1, w: 1.6 + Math.random() * 2.4 };
     }
-    function strike() { bolts.push(makeBolt()); flash = Math.min(0.7, flash + 0.34 + Math.random() * 0.24); }
+    function strike() {
+      bolts.push(makeBolt());
+      if (Math.random() < 0.45) bolts.push(makeBolt());   // occasional double strike
+      flash = Math.min(0.9, flash + 0.42 + Math.random() * 0.3);
+    }
     function path(pts) { ctx.beginPath(); ctx.moveTo(pts[0][0], pts[0][1]); for (let i = 1; i < pts.length; i++) ctx.lineTo(pts[i][0], pts[i][1]); ctx.stroke(); }
     function loop() {
       ctx.clearRect(0, 0, W, H);
-      if (flash > 0.02) { ctx.fillStyle = 'rgba(150,175,235,' + (flash * 0.22) + ')'; ctx.fillRect(0, 0, W, H); flash *= 0.82; }
+      if (flash > 0.02) { ctx.fillStyle = 'rgba(160,185,240,' + (flash * 0.3) + ')'; ctx.fillRect(0, 0, W, H); flash *= 0.8; }
       ctx.lineCap = 'round'; ctx.lineJoin = 'round'; ctx.shadowColor = 'rgba(180,210,255,0.95)';
       for (const b of bolts) {
         ctx.shadowBlur = 18; ctx.strokeStyle = 'rgba(226,238,255,' + b.life + ')'; ctx.lineWidth = b.w; path(b.pts);
@@ -1293,10 +1297,10 @@
       ctx.shadowBlur = 0; bolts = bolts.filter(b => b.life > 0.05);
       raf = requestAnimationFrame(loop);
     }
-    function schedule() { if (!active) return; strike(); timer = setTimeout(schedule, 1500 + Math.random() * 3200); }
+    function schedule() { if (!active) return; strike(); timer = setTimeout(schedule, 450 + Math.random() * 1250); }
     function start() {
       if (active) return; active = true; resize(); loop();
-      strike(); timer = setTimeout(schedule, 900 + Math.random() * 1400);
+      strike(); timer = setTimeout(schedule, 400 + Math.random() * 700);
     }
     function stop() {
       active = false;
