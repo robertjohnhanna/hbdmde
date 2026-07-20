@@ -2,7 +2,7 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
 <meta name="theme-color" id="meta-theme" content="#e9e6f0">
 <title>Happy Birthday, Maddie! 🎂</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
@@ -27,15 +27,25 @@
     --sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; background: #0a0713; }
+  html { background: #0a0713; }
   body {
     font-family: var(--sans);
     background: #0a0713;
     color: var(--ink);
-    overflow: hidden;   /* the deck is a fixed flip-card stack — the page itself doesn't scroll */
-    height: 100%;
     -webkit-font-smoothing: antialiased;
   }
+  /* Lock the whole experience down: no scroll, no zoom, no selection, no callouts.
+     The only interactions are a vertical swipe (handled in JS) and the gift button. */
+  html, body {
+    width: 100%; height: 100%;
+    overflow: hidden;
+    overscroll-behavior: none;
+    touch-action: none;                     /* no pan / pinch-zoom / double-tap-zoom */
+    -webkit-user-select: none; user-select: none;
+    -webkit-touch-callout: none;            /* no long-press callout on iOS */
+    -webkit-tap-highlight-color: transparent;
+  }
+  body { position: fixed; inset: 0; }       /* pin the page so iOS can't rubber-band it */
 
 
   /* ---------- Hero ---------- */
@@ -609,7 +619,7 @@
   .content > section {
     position: absolute; inset: 0;
     max-width: none; margin: 0; width: 100%; height: 100%;
-    overflow-y: auto; -webkit-overflow-scrolling: touch;
+    overflow: hidden; touch-action: none;
     display: flex; flex-direction: column; justify-content: safe center;
     backface-visibility: hidden;
     transform-origin: center center;
@@ -874,7 +884,7 @@
           <img src="img/tao.jpg" alt="Tao, the border collie" loading="lazy">
         </div>
         <h3>Tao</h3>
-        <p>&ldquo;Happy birthday, Mom! Rounded everyone up to say it. You're my favorite human.&rdquo;</p>
+        <p>&ldquo;Happy birthday, Mom! You're my favorite human.&rdquo;</p>
       </div>
       <div class="dog-card">
         <div class="dog-photo">
@@ -975,10 +985,15 @@
 </div>
 
 <script>
-  // ---------- Always start at the top on load / reload ----------
-  window.scrollTo(0, 0);
-  window.addEventListener('load', () => window.scrollTo(0, 0));
-  window.addEventListener('pageshow', (e) => { if (e.persisted) window.scrollTo(0, 0); });
+  // ---------- Lock down zoom / long-press / stray gestures ----------
+  // (Card navigation is swipe-only; the only tappable control is the gift button.)
+  ['gesturestart', 'gesturechange', 'gestureend'].forEach(t =>
+    document.addEventListener(t, (e) => e.preventDefault(), { passive: false }));   // pinch-zoom (Safari)
+  document.addEventListener('contextmenu', (e) => e.preventDefault());              // long-press callout
+  document.addEventListener('dblclick', (e) => e.preventDefault());                 // double-tap zoom
+  document.addEventListener('touchmove', (e) => {                                   // multi-finger / pinch
+    if (e.touches && e.touches.length > 1) e.preventDefault();
+  }, { passive: false });
 
   // ---------- Config ----------
   const BIRTH = { month: 6, day: 25, year: 1987 };   // July = month index 6
@@ -1215,28 +1230,22 @@
       setTimeout(() => { locked = false; }, 640);
     }
     const blocked = () => couponEl && couponEl.classList.contains('open');
-    const canScroll = (c, dir) => dir > 0
-      ? c.scrollTop + c.clientHeight < c.scrollHeight - 1
-      : c.scrollTop > 0;
     const next = () => { if (!blocked()) go(current + 1); };
     const prev = () => { if (!blocked()) go(current - 1); };
 
-    // Wheel / trackpad
+    // Wheel / trackpad — one flip per gesture, nothing else moves
     deck.addEventListener('wheel', (e) => {
-      if (blocked()) return;
-      if (canScroll(cards[current], e.deltaY)) return;   // let a tall card scroll first
       e.preventDefault();
-      if (Math.abs(e.deltaY) < 6) return;
+      if (blocked() || Math.abs(e.deltaY) < 6) return;
       if (e.deltaY > 0) next(); else prev();
     }, { passive: false });
 
-    // Touch swipe
+    // Touch swipe — the only way to change cards
     let touchY = null;
     deck.addEventListener('touchstart', (e) => { touchY = e.touches[0].clientY; }, { passive: true });
     deck.addEventListener('touchmove', (e) => {
       if (touchY === null || blocked()) return;
       const dy = e.touches[0].clientY - touchY;
-      if (canScroll(cards[current], -dy)) return;        // let a tall card scroll first
       if (Math.abs(dy) > 55) { (dy < 0 ? next() : prev()); touchY = null; }
     }, { passive: true });
     deck.addEventListener('touchend', () => { touchY = null; }, { passive: true });
