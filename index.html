@@ -322,6 +322,84 @@
   .favorite p { font-family: var(--serif); font-style: italic; font-weight: 700; font-size: clamp(2.1rem, 6.5vw, 3.6rem); line-height: 1.12; max-width: 15ch; margin: 0 auto; text-shadow: 0 4px 24px rgba(90,40,110,.25); }
   .favorite .by { margin-top: 1.6rem; font-size: .82rem; letter-spacing: .28em; text-transform: uppercase; color: rgba(255,255,255,.9); }
 
+  /* ---------- Massage coupon ---------- */
+  .coupon-overlay {
+    position: fixed; inset: 0; z-index: 1000;
+    display: flex; align-items: center; justify-content: center;
+    padding: 1.2rem;
+    background: rgba(24, 16, 40, .62);
+    backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+    opacity: 0; visibility: hidden; transition: opacity .3s ease, visibility .3s ease;
+  }
+  .coupon-overlay.open { opacity: 1; visibility: visible; }
+  .coupon {
+    position: relative;
+    width: min(93vw, 430px);
+    background: linear-gradient(150deg, #fffdf8 0%, #fff5e6 100%);
+    border-radius: 20px;
+    box-shadow: 0 40px 90px rgba(0,0,0,.5);
+    transform: translateY(18px) scale(.94); opacity: 0;
+    transition: transform .45s cubic-bezier(.2,1.3,.35,1), opacity .35s ease;
+    overflow: hidden;
+    text-align: center;
+  }
+  .coupon-overlay.open .coupon { transform: none; opacity: 1; }
+  .coupon::before {          /* inner gold hairline frame */
+    content: ''; position: absolute; inset: 10px; border: 1.5px solid #e6cf9b;
+    border-radius: 13px; pointer-events: none; z-index: 3;
+  }
+  .coupon-top {
+    background:
+      radial-gradient(circle at 12px 100%, transparent 11px, #6a3f86 12px) left bottom / 24px 100% no-repeat,
+      linear-gradient(135deg, #7a4c96, #b3688f 55%, #d98a63);
+    color: #fff; padding: 2.1rem 1.6rem 1.7rem;
+  }
+  .coupon-kicker { font-size: .72rem; letter-spacing: .32em; text-transform: uppercase; color: rgba(255,255,255,.88); }
+  .coupon-icon { font-size: 2.4rem; line-height: 1; margin: .5rem 0 .3rem; filter: drop-shadow(0 4px 10px rgba(0,0,0,.25)); }
+  .coupon-title { font-family: var(--serif); font-weight: 800; font-size: clamp(1.9rem, 6vw, 2.5rem); line-height: 1.05; letter-spacing: -.01em; }
+  .coupon-by { margin: .5rem auto 0; max-width: 64%; font-style: italic; font-family: var(--serif); font-size: 1.02rem; color: rgba(255,255,255,.95); }
+  .coupon-perf {
+    height: 0; border-top: 2px dashed #e2c894;
+    position: relative; background: #fff5e6;
+  }
+  .coupon-perf::before, .coupon-perf::after {
+    content: ''; position: absolute; top: 50%; width: 22px; height: 22px;
+    background: rgba(24,16,40,.62); border-radius: 50%; transform: translateY(-50%);
+  }
+  .coupon-perf::before { left: -11px; }
+  .coupon-perf::after { right: -11px; }
+  .coupon-body { padding: 1.5rem 1.6rem 1.7rem; }
+  .coupon-terms { list-style: none; text-align: left; max-width: 300px; margin: 0 auto 1.3rem; }
+  .coupon-terms li { position: relative; padding: .34rem 0 .34rem 1.5rem; color: #5a5348; font-size: .92rem; line-height: 1.4; }
+  .coupon-terms li::before { content: '✓'; position: absolute; left: 0; color: #b3688f; font-weight: 700; }
+  .coupon-terms b { color: #3d3730; }
+  .coupon-foot { display: flex; align-items: center; justify-content: space-between; gap: 1rem; border-top: 1px solid rgba(120,100,60,.16); padding-top: 1.1rem; }
+  .barcode { height: 40px; flex: 1; max-width: 170px;
+    background: repeating-linear-gradient(90deg,
+      #2b2536 0 2px, transparent 2px 4px, #2b2536 4px 5px, transparent 5px 8px,
+      #2b2536 8px 11px, transparent 11px 12px, #2b2536 12px 14px, transparent 14px 17px); }
+  .coupon-serial { font-family: 'Courier New', monospace; font-size: .68rem; letter-spacing: .04em; color: #8a8272; text-align: right; }
+  .coupon-seal {
+    position: absolute; right: 20px; top: 50%; transform: translateY(-50%) rotate(-13deg); z-index: 4;
+    width: 74px; height: 74px; border-radius: 50%;
+    border: 2px dashed #c99a3a; color: #a9791f;
+    display: grid; place-items: center; text-align: center;
+    font-family: var(--serif); font-weight: 700; font-size: .74rem; line-height: 1.1;
+    background: rgba(255,250,238,.92);
+    box-shadow: 0 4px 12px rgba(0,0,0,.08);
+  }
+  .coupon-close {
+    position: absolute; top: .5rem; right: .6rem; z-index: 5;
+    width: 2rem; height: 2rem; border: none; border-radius: 50%;
+    background: rgba(255,255,255,.25); color: #fff; font-size: 1.3rem; line-height: 1;
+    cursor: pointer; transition: background .2s ease;
+  }
+  .coupon-close:hover { background: rgba(255,255,255,.45); }
+  @media (max-width: 600px) {
+    .coupon-seal { width: 62px; height: 62px; font-size: .64rem; right: 16px; }
+    .coupon-top { padding: 1.8rem 1.3rem 1.4rem; }
+  }
+
   /* ---------- Cosmos / Star chart ---------- */
   .cosmos-wrap {
     position: relative;
@@ -877,7 +955,7 @@
       </p>
       <div class="signoff">&mdash; Bob</div>
       <br>
-      <button class="cake-btn" id="celebrate">More confetti</button>
+      <button class="cake-btn" id="open-coupon">🎁 Open your gift</button>
     </div>
   </section>
 
@@ -890,6 +968,31 @@
   </section>
 
   <footer>For Maddie &bull; July 25</footer>
+</div>
+
+<!-- MASSAGE COUPON -->
+<div class="coupon-overlay" id="coupon" role="dialog" aria-modal="true" aria-label="Gift certificate for one free massage">
+  <div class="coupon">
+    <button class="coupon-close" id="coupon-close" aria-label="Close">&times;</button>
+    <div class="coupon-top">
+      <div class="coupon-kicker">Gift Certificate</div>
+      <div class="coupon-icon">💆‍♀️</div>
+      <div class="coupon-title">One Free Massage</div>
+      <div class="coupon-by">personally administered by Bob</div>
+    </div>
+    <div class="coupon-perf"><div class="coupon-seal" aria-hidden="true">Valid<br>Forever</div></div>
+    <div class="coupon-body">
+      <ul class="coupon-terms">
+        <li>Redeemable by <b>Maddie</b> &mdash; anytime, on demand</li>
+        <li>Good for one (1) full-length massage</li>
+        <li>No expiration &bull; no blackout dates &bull; no catch</li>
+      </ul>
+      <div class="coupon-foot">
+        <div class="barcode" aria-hidden="true"></div>
+        <div class="coupon-serial">NO. MADDIE&middot;07&middot;25&middot;1987<br>ISSUED 07/25/2026</div>
+      </div>
+    </div>
+  </div>
 </div>
 
 <script>
@@ -1004,7 +1107,20 @@
   }
   draw();
   burst(180);
-  document.getElementById('celebrate').addEventListener('click', () => burst(250));
+
+  // ---------- Massage coupon ----------
+  const couponOverlay = document.getElementById('coupon');
+  const openCouponBtn = document.getElementById('open-coupon');
+  const closeCouponBtn = document.getElementById('coupon-close');
+  function openCoupon() {
+    couponOverlay.classList.add('open');
+    burst(260);
+  }
+  function closeCoupon() { couponOverlay.classList.remove('open'); }
+  openCouponBtn.addEventListener('click', openCoupon);
+  closeCouponBtn.addEventListener('click', closeCoupon);
+  couponOverlay.addEventListener('click', (e) => { if (e.target === couponOverlay) closeCoupon(); });
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') closeCoupon(); });
 
   // ---------- Floating hearts ----------
   const HEARTS = ['💖', '💕', '🩷', '💗', '🎈'];
