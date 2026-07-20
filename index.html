@@ -58,7 +58,7 @@
     align-items: center;
     justify-content: center;
     text-align: center;
-    padding: 2rem 1.2rem 3rem;
+    padding: 1.5rem 1.2rem 1.5rem;
     overflow: hidden;
     isolation: isolate;
   }
@@ -88,7 +88,7 @@
     font-size: clamp(2.9rem, 9vw, 6.2rem);
     line-height: 1.04;
     letter-spacing: -.01em;
-    margin: .7rem 0 .7rem;
+    margin: .5rem 0 .5rem;
     color: #fff;
     text-shadow: 0 4px 34px rgba(0,0,0,.4), 0 2px 8px rgba(0,0,0,.3);
     animation: pop-in 1.1s cubic-bezier(.2, 1.2, .3, 1) both;
@@ -104,7 +104,7 @@
   }
   @keyframes fade-up { from { transform: translateY(20px); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
 
-  .countdown { display: flex; gap: .7rem; margin-top: 2.2rem; flex-wrap: wrap; justify-content: center; animation: fade-up 1.2s .6s ease both; }
+  .countdown { display: flex; gap: .7rem; margin-top: 1.5rem; flex-wrap: wrap; justify-content: center; animation: fade-up 1.2s .6s ease both; }
   .countdown .unit {
     background: rgba(255, 255, 255, .14);
     border: 1px solid rgba(255,255,255,.28);
@@ -116,7 +116,7 @@
   }
   .countdown .num { font-family: var(--serif); font-size: 2.3rem; font-weight: 800; color: #fff; line-height: 1; }
   .countdown .label { font-size: .72rem; text-transform: uppercase; letter-spacing: .16em; color: rgba(255,255,255,.8); margin-top: .3rem; }
-  .countdown-title { margin-top: 2.2rem; font-size: .92rem; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: .22em; animation: fade-up 1.2s .5s ease both; }
+  .countdown-title { margin-top: 1.4rem; font-size: .92rem; color: rgba(255,255,255,.9); text-transform: uppercase; letter-spacing: .22em; animation: fade-up 1.2s .5s ease both; }
   .countdown-when { margin-top: .45rem; font-family: var(--serif); font-size: 1.25rem; font-weight: 700; color: var(--gold); letter-spacing: .02em; text-shadow: 0 2px 14px rgba(0,0,0,.45); animation: fade-up 1.2s .55s ease both; }
 
   /* ---------- Sections ---------- */
@@ -193,7 +193,7 @@
     border-radius: 2px;
     background: linear-gradient(180deg, var(--rose), #b86bff, #6bc5ff);
   }
-  .event { position: relative; margin-bottom: 2.4rem; }
+  .event { position: relative; margin-bottom: 1.5rem; }
   .event::before {
     content: '';
     position: absolute;
@@ -464,7 +464,7 @@
     color: #c9c2ea;
     font-size: 1.05rem;
     letter-spacing: .04em;
-    margin-bottom: 2.6rem;
+    margin-bottom: 2.2rem;
   }
   .cosmos-sub b { color: var(--gold); font-weight: 700; }
 
@@ -767,8 +767,13 @@
     .passion p { display: none; }
     .passion h3 { margin-bottom: 0; }
     .note p { font-size: .9rem; margin-bottom: .8rem; }
+    .stats { gap: .5rem; }
     .stat-card { padding: 1rem .9rem; }
-    .stat-card .value { font-size: 2rem; }
+    .stat-card .value { font-size: 1.85rem; }
+    .stat-card .label { margin-top: .35rem; }
+    .dogs { gap: .5rem; }
+    .stats-dogs .dog-card h3 { font-size: 1.05rem; margin-top: .4rem; }
+    .stats-dogs .dog-card p { font-size: .68rem; line-height: 1.3; }
   }
 
   /* ---------- Landscape (tablets/short windows): compact the numbers+dogs card so it fits
@@ -786,6 +791,74 @@
     .stats-dogs .dog-card { padding: .5rem .5rem .8rem; }
     .stats-dogs .dog-card h3 { font-size: 1.2rem; margin-top: .5rem; }
     .stats-dogs .dog-card p { font-size: .78rem; line-height: 1.4; }
+  }
+
+  /* ---------- Landscape phones (very short height): every card must fit one screen.
+     Width is plentiful here, so we spread content into columns and shrink type/spacing
+     rather than letting a tall single column run off the bottom. ---------- */
+  @media (orientation: landscape) and (max-height: 500px) {
+    section { padding: .8rem 1rem; }
+    h2 { font-size: 1.4rem; margin-bottom: .3rem; }
+    .divider { margin: .4rem auto .7rem; }
+    .section-lead { margin-bottom: .8rem; font-size: .82rem; }
+
+    /* Hero */
+    .hero { padding: .7rem 1rem; }
+    .hero .balloons { display: none; }
+    .hero h1 { font-size: 2.1rem; margin: .15rem 0 .3rem; }
+    .hero .subtitle { font-size: .88rem; max-width: 44ch; }
+    .countdown-title { margin-top: .7rem; font-size: .66rem; letter-spacing: .14em; }
+    .countdown-when { font-size: 1rem; margin-top: .2rem; }
+    .countdown { margin-top: .6rem; gap: .45rem; }
+    .countdown .unit { min-width: 56px; padding: .45rem .5rem; border-radius: 12px; }
+    .countdown .num { font-size: 1.45rem; }
+    .countdown .label { font-size: .54rem; letter-spacing: .06em; }
+
+    /* Chart: keep the two panels side by side, drop the wordy extras */
+    .cosmos-wrap { padding: .8rem 1rem; }
+    .cosmos-sub { margin-bottom: .5rem; font-size: .7rem; }
+    .chart-grid { grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; }
+    .constellation { max-width: 300px; margin: 0 auto; padding: 0; border: none; background: none; }
+    .c-label { display: none; }
+    .zodiac .traits, .zodiac .blurb { display: none; }
+    .zodiac .glyph { font-size: 2rem; }
+    .zodiac .sign { font-size: 1.3rem; margin: .1rem 0 0; }
+    .zodiac .rulers { font-size: .66rem; margin-bottom: .5rem; }
+    .big-three { margin-top: .5rem; gap: .4rem; max-width: 320px; }
+    .bt-card { padding: .5rem .3rem; }
+    .bt-glyph { font-size: 1.2rem; }
+    .bt-desc { display: none; }
+
+    /* Numbers: 3 across so the six cards are two short rows */
+    .stats { grid-template-columns: repeat(3, 1fr); max-width: 720px; gap: .5rem; }
+    .stat-card { padding: .55rem .7rem; }
+    .stat-card .value { font-size: 1.55rem; }
+    .stat-card .label { font-size: .55rem; letter-spacing: .1em; margin-top: .2rem; }
+    .stat-card .meta { font-size: .58rem; margin-top: .15rem; }
+    .dogs.stats-dogs { grid-template-columns: repeat(2, 1fr); max-width: 380px; gap: .6rem; margin-top: .5rem; }
+    .stats-dogs .dog-photo { aspect-ratio: 16 / 9; }
+    .stats-dogs .dog-card { padding: .3rem .3rem .45rem; }
+    .stats-dogs .dog-card h3 { font-size: .98rem; margin-top: .3rem; }
+    .stats-dogs .dog-card p { font-size: .6rem; line-height: 1.28; }
+
+    /* Story: a compact 3×2 grid of moments instead of a tall vertical timeline */
+    .timeline { padding-left: 0; display: grid; grid-template-columns: repeat(3, 1fr); gap: .5rem .9rem; }
+    .timeline::before { display: none; }
+    .event { margin-bottom: 0; }
+    .event::before { display: none; }
+    .event .year { font-size: .68rem; }
+    .event h3 { font-size: .92rem; margin: .05rem 0 .1rem; }
+    .event p { font-size: .66rem; line-height: 1.28; }
+
+    /* Love note */
+    .note { padding: .9rem 1.1rem; border-radius: 18px; }
+    .note .note-open { font-size: 1.1rem; margin-bottom: .5rem; }
+    .note p { font-size: .78rem; line-height: 1.4; margin-bottom: .35rem; max-width: 74ch; }
+    .note .signoff { font-size: .92rem; }
+    .paw-sigs { margin-top: .3rem; }
+    .paw-sigs .paw-lg { width: 26px; }
+    .paw-sigs .paw-sm { width: 17px; }
+    .cake-btn { margin-top: .5rem; padding: .5rem 1.3rem; font-size: .88rem; }
   }
 </style>
 </head>
