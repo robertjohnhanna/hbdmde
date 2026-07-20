@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" id="meta-theme" content="#e9e6f0">
 <title>Happy Birthday, Maddie! 🎂</title>
 <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
 <script>if ('scrollRestoration' in history) history.scrollRestoration = 'manual';</script>
@@ -1082,7 +1083,10 @@
   const heroEl = document.querySelector('.hero');
   let heroOnScreen = true;
   if (heroEl && 'IntersectionObserver' in window) {
-    new IntersectionObserver((e) => { heroOnScreen = e[0].isIntersecting; }, { threshold: 0 }).observe(heroEl);
+    new IntersectionObserver((e) => {
+      heroOnScreen = e[0].intersectionRatio >= 0.5;
+      if (!heroOnScreen) pieces.length = 0;   // confetti lives on the hero only
+    }, { threshold: [0, 0.5, 1] }).observe(heroEl);
   }
   function rainTop(count) {
     for (let i = 0; i < count; i++) {
@@ -1160,6 +1164,23 @@
       frag.appendChild(s);
     }
     sky.appendChild(frag);
+  })();
+
+  // ---------- Tint the iOS status bar to match the section on screen ----------
+  (function () {
+    const meta = document.getElementById('meta-theme');
+    if (!meta || !('IntersectionObserver' in window)) return;
+    function colorFor(el) {
+      if (el.matches('.cosmos-wrap')) return '#201a3c';   // chart (dark indigo)
+      if (el.matches('.storm-section')) return '#0a0713'; // note (near-black)
+      if (el.matches('#story')) return '#ece7fa';         // story (light lavender)
+      if (el.matches('.flock')) return '#f3ebfb';         // stats (light lavender)
+      return '#e9e6f0';                                   // hero / default (light)
+    }
+    const io = new IntersectionObserver((entries) => {
+      entries.forEach(e => { if (e.isIntersecting) meta.setAttribute('content', colorFor(e.target)); });
+    }, { threshold: 0.5 });
+    document.querySelectorAll('.content > section, .content > header').forEach(el => io.observe(el));
   })();
 
   // ---------- Scroll reveal ----------
