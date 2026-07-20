@@ -1,0 +1,473 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Happy Birthday, Maddie! 🎂</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎂</text></svg>">
+<style>
+  :root {
+    --pink: #ff7eb9;
+    --rose: #ff65a3;
+    --purple: #7afcff;
+    --gold: #ffd166;
+    --ink: #2d2a3f;
+    --cream: #fff7f9;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
+    background: linear-gradient(160deg, #fde8ef 0%, #f5e6ff 45%, #e6f4ff 100%);
+    color: var(--ink);
+    overflow-x: hidden;
+    min-height: 100vh;
+  }
+
+  /* ---------- Hero ---------- */
+  .hero {
+    position: relative;
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    text-align: center;
+    padding: 2rem 1rem;
+  }
+  .hero .balloons { font-size: 2.5rem; letter-spacing: .5rem; animation: floaty 4s ease-in-out infinite; }
+  @keyframes floaty {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(-14px); }
+  }
+  .hero h1 {
+    font-size: clamp(2.6rem, 8vw, 5.5rem);
+    line-height: 1.1;
+    margin: 1rem 0 .5rem;
+    background: linear-gradient(90deg, var(--rose), #b86bff, #ff9a5c);
+    -webkit-background-clip: text;
+    background-clip: text;
+    color: transparent;
+    animation: pop-in 1s cubic-bezier(.2, 1.4, .4, 1) both;
+  }
+  @keyframes pop-in {
+    from { transform: scale(.6); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
+  }
+  .hero .subtitle {
+    font-size: clamp(1.1rem, 3vw, 1.5rem);
+    color: #6b6485;
+    animation: fade-up 1.2s .3s ease both;
+  }
+  @keyframes fade-up {
+    from { transform: translateY(20px); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
+  }
+
+  .countdown {
+    display: flex;
+    gap: .8rem;
+    margin-top: 2.2rem;
+    flex-wrap: wrap;
+    justify-content: center;
+    animation: fade-up 1.2s .6s ease both;
+  }
+  .countdown .unit {
+    background: rgba(255, 255, 255, .75);
+    backdrop-filter: blur(6px);
+    border-radius: 16px;
+    padding: 1rem 1.2rem;
+    min-width: 90px;
+    box-shadow: 0 8px 24px rgba(255, 101, 163, .18);
+  }
+  .countdown .num { font-size: 2.2rem; font-weight: 800; color: var(--rose); }
+  .countdown .label { font-size: .8rem; text-transform: uppercase; letter-spacing: .1em; color: #8a819e; }
+  .countdown-title { margin-top: 2rem; font-size: 1rem; color: #8a819e; text-transform: uppercase; letter-spacing: .2em; animation: fade-up 1.2s .5s ease both; }
+
+  .scroll-hint {
+    margin-top: 3rem;
+    font-size: 1.6rem;
+    color: var(--rose);
+    animation: bob 1.6s ease-in-out infinite;
+    text-decoration: none;
+  }
+  @keyframes bob {
+    0%, 100% { transform: translateY(0); }
+    50% { transform: translateY(8px); }
+  }
+
+  /* ---------- Sections ---------- */
+  section { max-width: 900px; margin: 0 auto; padding: 4rem 1.5rem; }
+  h2 {
+    font-size: clamp(1.8rem, 5vw, 2.6rem);
+    text-align: center;
+    margin-bottom: 2.5rem;
+    color: var(--ink);
+  }
+  h2 span { color: var(--rose); }
+
+  /* ---------- Stats ---------- */
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(190px, 1fr));
+    gap: 1.2rem;
+  }
+  .stat-card {
+    background: rgba(255, 255, 255, .8);
+    border-radius: 20px;
+    padding: 1.6rem 1.2rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(120, 90, 200, .1);
+    transition: transform .25s ease, box-shadow .25s ease;
+  }
+  .stat-card:hover { transform: translateY(-6px); box-shadow: 0 16px 36px rgba(120, 90, 200, .18); }
+  .stat-card .emoji { font-size: 2.2rem; }
+  .stat-card .value { font-size: 2rem; font-weight: 800; color: var(--rose); margin: .3rem 0; }
+  .stat-card .desc { color: #6b6485; font-size: .95rem; }
+
+  /* ---------- Timeline ---------- */
+  .timeline { position: relative; padding-left: 2rem; }
+  .timeline::before {
+    content: '';
+    position: absolute;
+    left: .55rem;
+    top: 0;
+    bottom: 0;
+    width: 4px;
+    border-radius: 2px;
+    background: linear-gradient(180deg, var(--rose), #b86bff, #6bc5ff);
+  }
+  .event { position: relative; margin-bottom: 2.4rem; }
+  .event::before {
+    content: '';
+    position: absolute;
+    left: -2rem;
+    top: .35rem;
+    width: 1.1rem;
+    height: 1.1rem;
+    border-radius: 50%;
+    background: #fff;
+    border: 4px solid var(--rose);
+    box-shadow: 0 0 0 4px rgba(255, 101, 163, .2);
+  }
+  .event .year { font-weight: 800; color: var(--rose); font-size: 1.1rem; letter-spacing: .05em; }
+  .event h3 { font-size: 1.3rem; margin: .2rem 0 .3rem; }
+  .event p { color: #6b6485; line-height: 1.6; }
+
+  /* ---------- Dogs ---------- */
+  .dogs { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 1.5rem; }
+  .dog-card {
+    background: rgba(255, 255, 255, .85);
+    border-radius: 24px;
+    padding: 2rem 1.5rem;
+    text-align: center;
+    box-shadow: 0 10px 30px rgba(120, 90, 200, .12);
+    transition: transform .25s ease;
+  }
+  .dog-card:hover { transform: translateY(-6px) rotate(-1deg); }
+  .dog-card .pup { font-size: 4rem; }
+  .dog-card h3 { font-size: 1.6rem; margin: .6rem 0 .2rem; color: var(--rose); }
+  .dog-card .breed { font-weight: 600; color: #8a819e; margin-bottom: .6rem; }
+  .dog-card p { color: #6b6485; line-height: 1.6; }
+
+  /* ---------- Love note ---------- */
+  .note {
+    background: rgba(255, 255, 255, .9);
+    border-radius: 28px;
+    padding: clamp(1.8rem, 5vw, 3rem);
+    box-shadow: 0 14px 40px rgba(255, 101, 163, .15);
+    text-align: center;
+  }
+  .note p {
+    font-size: clamp(1.05rem, 2.5vw, 1.25rem);
+    line-height: 1.9;
+    color: #504a68;
+    max-width: 620px;
+    margin: 0 auto 1.2rem;
+  }
+  .note .signoff { font-size: 1.3rem; font-weight: 700; color: var(--rose); }
+
+  .cake-btn {
+    display: inline-block;
+    margin-top: 1.6rem;
+    border: none;
+    cursor: pointer;
+    font-size: 1.1rem;
+    font-weight: 700;
+    color: #fff;
+    background: linear-gradient(90deg, var(--rose), #b86bff);
+    padding: .9rem 2rem;
+    border-radius: 999px;
+    box-shadow: 0 10px 24px rgba(255, 101, 163, .35);
+    transition: transform .2s ease, box-shadow .2s ease;
+  }
+  .cake-btn:hover { transform: scale(1.05); box-shadow: 0 14px 30px rgba(255, 101, 163, .45); }
+  .cake-btn:active { transform: scale(.97); }
+
+  footer {
+    text-align: center;
+    padding: 2.5rem 1rem 3rem;
+    color: #8a819e;
+    font-size: .95rem;
+  }
+
+  /* ---------- Confetti ---------- */
+  #confetti-canvas {
+    position: fixed;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    pointer-events: none;
+    z-index: 999;
+  }
+
+  /* ---------- Floating hearts background ---------- */
+  .heart-bg {
+    position: fixed;
+    bottom: -3rem;
+    font-size: 1.4rem;
+    opacity: 0;
+    pointer-events: none;
+    animation: rise linear infinite;
+    z-index: 0;
+  }
+  @keyframes rise {
+    0% { transform: translateY(0) rotate(0deg); opacity: 0; }
+    10% { opacity: .5; }
+    90% { opacity: .4; }
+    100% { transform: translateY(-110vh) rotate(40deg); opacity: 0; }
+  }
+  .content { position: relative; z-index: 1; }
+</style>
+</head>
+<body>
+<canvas id="confetti-canvas"></canvas>
+
+<div class="content">
+  <!-- HERO -->
+  <header class="hero">
+    <div class="balloons">🎈🎉🎈</div>
+    <h1>Happy Birthday,<br>Maddie!</h1>
+    <p class="subtitle">July 25th &mdash; the best day of the year 💖</p>
+    <div class="countdown-title" id="countdown-title">Counting down to the big day</div>
+    <div class="countdown" id="countdown">
+      <div class="unit"><div class="num" id="cd-days">–</div><div class="label">Days</div></div>
+      <div class="unit"><div class="num" id="cd-hours">–</div><div class="label">Hours</div></div>
+      <div class="unit"><div class="num" id="cd-mins">–</div><div class="label">Minutes</div></div>
+      <div class="unit"><div class="num" id="cd-secs">–</div><div class="label">Seconds</div></div>
+    </div>
+    <a class="scroll-hint" href="#story" aria-label="Scroll down">⌄</a>
+  </header>
+
+  <!-- STATS -->
+  <section>
+    <h2>Maddie, <span>by the numbers</span></h2>
+    <div class="stats">
+      <div class="stat-card">
+        <div class="emoji">🎂</div>
+        <div class="value" id="stat-age">–</div>
+        <div class="desc">years young (and somehow more beautiful every single one)</div>
+      </div>
+      <div class="stat-card">
+        <div class="emoji">💞</div>
+        <div class="value" id="stat-together">–</div>
+        <div class="desc">years together since 2004</div>
+      </div>
+      <div class="stat-card">
+        <div class="emoji">💍</div>
+        <div class="value" id="stat-married">–</div>
+        <div class="desc">years married since that perfect day in Jamaica</div>
+      </div>
+      <div class="stat-card">
+        <div class="emoji">🐾</div>
+        <div class="value">2</div>
+        <div class="desc">very good dogs who love their mom</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- TIMELINE -->
+  <section id="story">
+    <h2>Our <span>story</span></h2>
+    <div class="timeline">
+      <div class="event">
+        <div class="year">July 25, 1987</div>
+        <h3>A star is born ⭐</h3>
+        <p>The world got a whole lot better the day Maddie arrived.</p>
+      </div>
+      <div class="event">
+        <div class="year">2004</div>
+        <h3>We found each other 💘</h3>
+        <p>The beginning of everything. Two kids who had no idea they'd just met their forever person.</p>
+      </div>
+      <div class="event">
+        <div class="year">November 5, 2015</div>
+        <h3>"I do" in Jamaica 🌴</h3>
+        <p>Toes in the sand, island breeze, and the easiest yes of my life. Best decision I ever made.</p>
+      </div>
+      <div class="event">
+        <div class="year">Today</div>
+        <h3>Still crazy about you 💖</h3>
+        <p>Two decades in, and you're still my favorite person. Here's to celebrating you today and always.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- DOGS -->
+  <section>
+    <h2>Love from <span>the fur kids</span> 🐾</h2>
+    <div class="dogs">
+      <div class="dog-card">
+        <div class="pup">🐶</div>
+        <h3>Tao</h3>
+        <div class="breed">Border Collie &bull; Resident Genius</div>
+        <p>"Happy birthday, Mom! I already herded everyone into the living room for your party. You're the goodest human."</p>
+      </div>
+      <div class="dog-card">
+        <div class="pup">🐕‍🦺</div>
+        <h3>Raven</h3>
+        <div class="breed">German Shepherd &bull; Chief of Security</div>
+        <p>"Perimeter secured for your special day, Mom. No squirrels shall interrupt the celebration. I love you the most."</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- LOVE NOTE -->
+  <section>
+    <h2>A note from <span>your husband</span></h2>
+    <div class="note">
+      <p>
+        Maddie &mdash; since 2004 you've been my best friend, my partner, and my favorite part of every day.
+        From saying "I do" on a beach in Jamaica to building this beautiful life with you (and our two
+        four-legged shadows), every year with you is the best one yet.
+      </p>
+      <p>
+        Today is all about you. Happy birthday, my love.
+      </p>
+      <div class="signoff">All my love, forever &amp; always 💍</div>
+      <br>
+      <button class="cake-btn" id="celebrate">🎂 Click for confetti!</button>
+    </div>
+  </section>
+
+  <footer>Made with 💖 for Maddie &bull; July 25</footer>
+</div>
+
+<script>
+  // ---------- Config ----------
+  const BIRTH = { month: 6, day: 25, year: 1987 };   // July = month index 6
+  const TOGETHER_YEAR = 2004;
+  const WEDDING = new Date(2015, 10, 5);             // Nov 5, 2015
+
+  // ---------- Stats ----------
+  function yearsSince(date) {
+    const now = new Date();
+    let years = now.getFullYear() - date.getFullYear();
+    const anniv = new Date(now.getFullYear(), date.getMonth(), date.getDate());
+    if (now < anniv) years--;
+    return years;
+  }
+  document.getElementById('stat-age').textContent =
+    yearsSince(new Date(BIRTH.year, BIRTH.month, BIRTH.day));
+  document.getElementById('stat-together').textContent =
+    new Date().getFullYear() - TOGETHER_YEAR;
+  document.getElementById('stat-married').textContent = yearsSince(WEDDING);
+
+  // ---------- Countdown ----------
+  function nextBirthday() {
+    const now = new Date();
+    let bday = new Date(now.getFullYear(), BIRTH.month, BIRTH.day);
+    const endOfBday = new Date(now.getFullYear(), BIRTH.month, BIRTH.day + 1);
+    if (now >= endOfBday) bday = new Date(now.getFullYear() + 1, BIRTH.month, BIRTH.day);
+    return bday;
+  }
+  function isBirthdayToday() {
+    const now = new Date();
+    return now.getMonth() === BIRTH.month && now.getDate() === BIRTH.day;
+  }
+  function tick() {
+    const title = document.getElementById('countdown-title');
+    const box = document.getElementById('countdown');
+    if (isBirthdayToday()) {
+      title.textContent = "🎉 IT'S YOUR BIRTHDAY!! 🎉";
+      title.style.color = '#ff65a3';
+      title.style.fontWeight = '800';
+      box.style.display = 'none';
+      return;
+    }
+    const diff = nextBirthday() - new Date();
+    const d = Math.floor(diff / 86400000);
+    const h = Math.floor(diff / 3600000) % 24;
+    const m = Math.floor(diff / 60000) % 60;
+    const s = Math.floor(diff / 1000) % 60;
+    document.getElementById('cd-days').textContent = d;
+    document.getElementById('cd-hours').textContent = h;
+    document.getElementById('cd-mins').textContent = m;
+    document.getElementById('cd-secs').textContent = s;
+  }
+  tick();
+  setInterval(tick, 1000);
+
+  // ---------- Confetti ----------
+  const canvas = document.getElementById('confetti-canvas');
+  const ctx = canvas.getContext('2d');
+  let pieces = [];
+  const COLORS = ['#ff65a3', '#ffd166', '#b86bff', '#6bc5ff', '#7bed9f', '#ff9a5c'];
+
+  function resize() {
+    canvas.width = window.innerWidth;
+    canvas.height = window.innerHeight;
+  }
+  window.addEventListener('resize', resize);
+  resize();
+
+  function burst(count) {
+    for (let i = 0; i < count; i++) {
+      pieces.push({
+        x: Math.random() * canvas.width,
+        y: -20 - Math.random() * canvas.height * 0.5,
+        w: 6 + Math.random() * 8,
+        h: 8 + Math.random() * 10,
+        vy: 2 + Math.random() * 3.5,
+        vx: -1.5 + Math.random() * 3,
+        rot: Math.random() * Math.PI * 2,
+        vr: -0.15 + Math.random() * 0.3,
+        color: COLORS[Math.floor(Math.random() * COLORS.length)]
+      });
+    }
+  }
+  function draw() {
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
+    pieces = pieces.filter(p => p.y < canvas.height + 30);
+    for (const p of pieces) {
+      p.x += p.vx;
+      p.y += p.vy;
+      p.rot += p.vr;
+      ctx.save();
+      ctx.translate(p.x, p.y);
+      ctx.rotate(p.rot);
+      ctx.fillStyle = p.color;
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+      ctx.restore();
+    }
+    requestAnimationFrame(draw);
+  }
+  draw();
+  burst(180);
+  document.getElementById('celebrate').addEventListener('click', () => burst(250));
+
+  // ---------- Floating hearts ----------
+  const HEARTS = ['💖', '💕', '🩷', '💗', '🎈'];
+  for (let i = 0; i < 14; i++) {
+    const el = document.createElement('div');
+    el.className = 'heart-bg';
+    el.textContent = HEARTS[i % HEARTS.length];
+    el.style.left = (Math.random() * 100) + 'vw';
+    el.style.animationDuration = (9 + Math.random() * 9) + 's';
+    el.style.animationDelay = (Math.random() * 10) + 's';
+    el.style.fontSize = (1 + Math.random() * 1.4) + 'rem';
+    document.body.appendChild(el);
+  }
+</script>
+</body>
+</html>
