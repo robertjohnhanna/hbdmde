@@ -658,6 +658,12 @@
     .passion p { display: none; }
     .passion h3 { margin-bottom: 0; }
     .note p { font-size: .9rem; margin-bottom: .8rem; }
+    /* 8 stat cards need to be tighter on short screens */
+    .stats { gap: .5rem; }
+    .stat-card { padding: .65rem .45rem; }
+    .stat-card .emoji { font-size: 1.4rem; }
+    .stat-card .value { font-size: 1.3rem; }
+    .stat-card .desc { font-size: .7rem; }
   }
 
   /* Landscape phones / very short screens: let sections scroll instead of snapping */
@@ -695,12 +701,12 @@
       <div class="stat-card">
         <div class="emoji">🎂</div>
         <div class="value" id="stat-age">–</div>
-        <div class="desc">years old today</div>
+        <div class="desc">trips around the sun</div>
       </div>
       <div class="stat-card">
         <div class="emoji">💞</div>
         <div class="value" id="stat-together">–</div>
-        <div class="desc">years together, since 2004</div>
+        <div class="desc">years together, since '04</div>
       </div>
       <div class="stat-card">
         <div class="emoji">💍</div>
@@ -708,9 +714,29 @@
         <div class="desc">years married, since Jamaica</div>
       </div>
       <div class="stat-card">
+        <div class="emoji">♌</div>
+        <div class="value">2</div>
+        <div class="desc">Leos in one &mdash; sun &amp; moon</div>
+      </div>
+      <div class="stat-card">
         <div class="emoji">🐾</div>
         <div class="value">2</div>
-        <div class="desc">dogs, each convinced they're your favorite</div>
+        <div class="desc">dogs, zero kids</div>
+      </div>
+      <div class="stat-card">
+        <div class="emoji">🚐</div>
+        <div class="value">1</div>
+        <div class="desc">road trip &rarr; Florida</div>
+      </div>
+      <div class="stat-card">
+        <div class="emoji">🎨</div>
+        <div class="value">&infin;</div>
+        <div class="desc">canvases poured</div>
+      </div>
+      <div class="stat-card">
+        <div class="emoji">💆</div>
+        <div class="value">1</div>
+        <div class="desc">massage coupon, on demand 😏</div>
       </div>
     </div>
   </section>
