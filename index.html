@@ -26,7 +26,7 @@
     --sans: 'Inter', 'Segoe UI', 'Helvetica Neue', Arial, sans-serif;
   }
   * { margin: 0; padding: 0; box-sizing: border-box; }
-  html { scroll-behavior: smooth; scroll-snap-type: y mandatory; }
+  html { scroll-behavior: smooth; scroll-snap-type: y proximity; }
   @media (prefers-reduced-motion: reduce) { html { scroll-snap-type: none; } }
   body {
     font-family: var(--sans);
@@ -37,10 +37,10 @@
     -webkit-font-smoothing: antialiased;
   }
 
-  /* ---------- Scroll reveal ---------- */
-  .reveal { opacity: 0; transform: translateY(34px); transition: opacity .9s cubic-bezier(.2,.7,.2,1), transform .9s cubic-bezier(.2,.7,.2,1); }
-  .reveal.in { opacity: 1; transform: none; }
-  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transform: none; transition: none; } }
+  /* ---------- Scroll reveal (fade only — no positional shift) ---------- */
+  .reveal { opacity: 0; transition: opacity .7s ease; }
+  .reveal.in { opacity: 1; }
+  @media (prefers-reduced-motion: reduce) { .reveal { opacity: 1; transition: none; } }
 
   /* ---------- Hero ---------- */
   .hero {
@@ -147,8 +147,10 @@
   /* ---------- Stats ---------- */
   .stats {
     display: grid;
-    grid-template-columns: repeat(3, 1fr);
+    grid-template-columns: repeat(2, 1fr);
     gap: 1rem;
+    max-width: 620px;
+    margin: 0 auto;
   }
   .stat-card {
     background: #fff;
@@ -645,18 +647,18 @@
     /* favorite */
     .favorite { padding: 3.5rem 1.2rem; }
 
-    /* chart: keep only the essentials on mobile */
-    .cosmos-wrap { padding: 2.4rem 1.05rem; }
-    .cosmos-sub { margin-bottom: 1.4rem; font-size: .9rem; }
-    .chart-grid { grid-template-columns: 1fr; gap: .4rem; }
-    .constellation { display: none; }
+    /* chart: keep the constellation, drop the wordy extras on mobile */
+    .cosmos-wrap { padding: 2.2rem 1.05rem; }
+    .cosmos-sub { margin-bottom: 1rem; font-size: .9rem; }
+    .chart-grid { grid-template-columns: 1fr; gap: .3rem; }
+    .constellation { max-width: 250px; margin: 0 auto .4rem; padding: 0; border: none; background: none; }
+    .c-label { display: none; }
     .zodiac .traits, .zodiac .blurb { display: none; }
-    .zodiac .glyph { font-size: 3rem; }
-    .zodiac .sign { font-size: 1.5rem; }
-    .zodiac .rulers { margin-bottom: .8rem; }
-    .big-three { margin-top: .8rem; gap: .45rem; max-width: 320px; }
-    .bt-card { padding: .65rem .3rem; }
-    .double-leo { margin-top: .9rem; font-size: .82rem; }
+    .zodiac .glyph { font-size: 2.6rem; }
+    .zodiac .sign { font-size: 1.4rem; }
+    .zodiac .rulers { margin-bottom: .7rem; font-size: .78rem; }
+    .big-three { margin-top: .7rem; gap: .45rem; max-width: 320px; }
+    .bt-card { padding: .6rem .3rem; }
   }
 
   /* Small phones (iPhone SE class): drop the extras so each section still fits */
@@ -795,14 +797,14 @@
         <div class="meta">and counting</div>
       </div>
       <div class="stat-card">
-        <div class="value">3</div>
-        <div class="label">Leo placements</div>
-        <div class="meta">sun, moon &amp; Mars</div>
-      </div>
-      <div class="stat-card">
         <div class="value" id="stat-together">–</div>
         <div class="label">Years together</div>
-        <div class="meta">since 2004</div>
+        <div class="meta">since 02·14·2004</div>
+      </div>
+      <div class="stat-card">
+        <div class="value" id="stat-days-together">–</div>
+        <div class="label">Days together</div>
+        <div class="meta">since Valentine's Day</div>
       </div>
       <div class="stat-card">
         <div class="value" id="stat-married">–</div>
@@ -827,9 +829,9 @@
         <p>1:29 p.m., Janesville, WI. Leo sun, Leo moon.</p>
       </div>
       <div class="event">
-        <div class="year">2004</div>
-        <h3>We met</h3>
-        <p>Neither of us knew what we were starting.</p>
+        <div class="year">Feb 14, 2004</div>
+        <h3>We got together</h3>
+        <p>Valentine's Day. Neither of us knew what we were starting.</p>
       </div>
       <div class="event">
         <div class="year">The proposal</div>
@@ -928,7 +930,7 @@
 
   // ---------- Config ----------
   const BIRTH = { month: 6, day: 25, year: 1987 };   // July = month index 6
-  const TOGETHER_YEAR = 2004;
+  const TOGETHER = new Date(2004, 1, 14);            // Feb 14, 2004 (Valentine's Day)
   const WEDDING = new Date(2015, 10, 5);             // Nov 5, 2015
 
   // ---------- Stats ----------
@@ -941,13 +943,15 @@
   }
   document.getElementById('stat-age').textContent =
     yearsSince(new Date(BIRTH.year, BIRTH.month, BIRTH.day));
-  document.getElementById('stat-together').textContent =
-    new Date().getFullYear() - TOGETHER_YEAR;
+  document.getElementById('stat-together').textContent = yearsSince(TOGETHER);
   document.getElementById('stat-married').textContent = yearsSince(WEDDING);
+  const DAY = 86400000;
+  document.getElementById('stat-days-together').textContent =
+    Math.floor((new Date() - TOGETHER) / DAY).toLocaleString();
   document.getElementById('stat-days').textContent =
-    Math.floor((new Date() - WEDDING) / 86400000).toLocaleString();
+    Math.floor((new Date() - WEDDING) / DAY).toLocaleString();
   document.getElementById('stat-alive').textContent =
-    Math.floor((new Date() - new Date(BIRTH.year, BIRTH.month, BIRTH.day)) / 86400000).toLocaleString();
+    Math.floor((new Date() - new Date(BIRTH.year, BIRTH.month, BIRTH.day)) / DAY).toLocaleString();
 
   // ---------- Countdown (to her exact birth moment: 1:29 PM) ----------
   const BIRTH_HOUR = 13, BIRTH_MIN = 29;   // 1:29 PM
