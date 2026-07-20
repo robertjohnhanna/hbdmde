@@ -796,7 +796,10 @@
 
   /* ---------- Landscape (tablets/short windows): compact the numbers+dogs card so it fits
      the visible band and stays vertically centered instead of overflowing off the bottom ---------- */
-  @media (orientation: landscape) and (min-width: 700px) and (max-height: 900px) {
+  /* Landscape tablets & laptops. Covers up to 1200px tall so the 12.9"/13" iPad (1366x1024)
+     is included — its Safari toolbar eats enough height that the full-size flock would spill
+     off the bottom. Dog photos crop to 16:9 so the whole card fits and centers with margin. */
+  @media (orientation: landscape) and (min-width: 700px) and (max-height: 1200px) {
     section { padding: 1.2rem 1.5rem; }
 
     .stats, .dogs.stats-dogs { max-width: 520px; }
@@ -806,6 +809,7 @@
     .stat-card .label { margin-top: .4rem; }
 
     .dogs.stats-dogs { gap: .7rem; margin-top: .7rem; }
+    .stats-dogs .dog-photo { aspect-ratio: 16 / 9; }
     .stats-dogs .dog-card { padding: .5rem .5rem .8rem; }
     .stats-dogs .dog-card h3 { font-size: 1.2rem; margin-top: .5rem; }
     .stats-dogs .dog-card p { font-size: .78rem; line-height: 1.4; }
@@ -850,12 +854,12 @@
     .bt-desc { display: none; }
 
     /* Numbers: 3 across so the six cards are two short rows */
-    .stats { grid-template-columns: repeat(3, 1fr); max-width: 720px; gap: .5rem; }
-    .stat-card { padding: .55rem .7rem; }
-    .stat-card .value { font-size: 1.55rem; }
+    .stats { grid-template-columns: repeat(3, 1fr); max-width: 720px; gap: .4rem; }
+    .stat-card { padding: .4rem .7rem; }
+    .stat-card .value { font-size: 1.4rem; }
     .stat-card .label { font-size: .55rem; letter-spacing: .1em; margin-top: .2rem; }
     .stat-card .meta { font-size: .58rem; margin-top: .15rem; }
-    .dogs.stats-dogs { grid-template-columns: repeat(2, 1fr); max-width: 380px; gap: .6rem; margin-top: .5rem; }
+    .dogs.stats-dogs { grid-template-columns: repeat(2, 1fr); max-width: 380px; gap: .6rem; margin-top: .4rem; }
     .stats-dogs .dog-photo { aspect-ratio: 16 / 9; }
     .stats-dogs .dog-card { padding: .3rem .3rem .45rem; }
     .stats-dogs .dog-card h3 { font-size: .98rem; margin-top: .3rem; }
@@ -879,6 +883,36 @@
     .paw-sigs .paw-lg { width: 26px; }
     .paw-sigs .paw-sm { width: 17px; }
     .cake-btn { margin-top: .5rem; padding: .5rem 1.3rem; font-size: .88rem; }
+  }
+
+  /* Short landscape tablets — iPad mini / 10.9" / 11" once the Safari tab+address bar is
+     deducted (band ~600–740). Wide but not tall, so the chart, story and note must compact.
+     min-height keeps landscape phones on their own tier; the 12.9"/13" iPad (taller) is
+     excluded so it keeps the full-size vertical timeline. */
+  @media (orientation: landscape) and (min-width: 700px) and (min-height: 501px) and (max-height: 840px) {
+    h2 { font-size: 1.7rem; }
+
+    /* Chart: shed the big padding and the long paragraph, keep the two panels side by side */
+    .cosmos-wrap { padding: 1.3rem 1.5rem; }
+    .cosmos-sub { margin-bottom: 1rem; }
+    .constellation { max-width: 440px; margin-inline: auto; }
+    .zodiac .blurb { display: none; }
+    .zodiac .traits { margin: .6rem 0; }
+    .big-three { margin-top: 1rem; }
+
+    /* Story: two columns of moments instead of the tall vertical timeline */
+    .timeline { padding-left: 0; display: grid; grid-template-columns: 1fr 1fr; gap: 1rem 1.8rem; max-width: 760px; margin-inline: auto; }
+    .timeline::before { display: none; }
+    .event { margin-bottom: 0; }
+    .event::before { display: none; }
+    .event h3 { margin: .15rem 0 .2rem; }
+
+    /* Love note: tighten padding and spacing */
+    .note { padding: 1.4rem 1.7rem; }
+    .note .note-open { font-size: 1.35rem; margin-bottom: .7rem; }
+    .note p { font-size: .92rem; margin-bottom: .55rem; }
+    .note .signoff { margin-top: .6rem; }
+    .cake-btn { margin-top: .8rem; }
   }
 </style>
 </head>
