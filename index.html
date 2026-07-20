@@ -1002,6 +1002,20 @@
     if (e.touches && e.touches.length > 1) e.preventDefault();
   }, { passive: false });
 
+  // ---------- Size the deck to the actually-visible area (above the iOS toolbar) ----------
+  (function () {
+    const deck = document.querySelector('.content');
+    if (!deck) return;
+    function fit() {
+      const h = (window.visualViewport && window.visualViewport.height) || window.innerHeight;
+      deck.style.height = Math.round(h) + 'px';
+    }
+    fit();
+    window.addEventListener('resize', fit);
+    window.addEventListener('orientationchange', fit);
+    if (window.visualViewport) window.visualViewport.addEventListener('resize', fit);
+  })();
+
   // ---------- Config ----------
   const BIRTH = { month: 6, day: 25, year: 1987 };   // July = month index 6
   const TOGETHER = new Date(2004, 1, 14);            // Feb 14, 2004 (Valentine's Day)
