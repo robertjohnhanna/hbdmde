@@ -164,6 +164,13 @@
   .stat-card .value { font-size: 3rem; font-weight: 800; color: var(--ink); line-height: 1; letter-spacing: -.02em; }
   .stat-card .label { margin-top: .6rem; font-size: .72rem; letter-spacing: .17em; text-transform: uppercase; color: var(--rose); font-weight: 600; }
   .stat-card .meta { margin-top: .3rem; font-family: 'Courier New', ui-monospace, monospace; font-size: .74rem; color: #8a819e; }
+  /* dog cards as the bottom row of the numbers grid */
+  .stats-dogs { max-width: 620px; margin: 1rem auto 0; gap: 1rem; }
+  .stats-dogs .dog-photo { aspect-ratio: 1 / 1; }
+  .stats-dogs .dog-card { padding: .7rem .7rem 1.1rem; }
+  .stats-dogs .dog-card h3 { font-size: 1.4rem; margin-top: .7rem; }
+  .stats-dogs .dog-card .breed { font-size: .8rem; margin-bottom: .5rem; }
+  .stats-dogs .dog-card p { font-size: .86rem; line-height: 1.5; }
 
   /* ---------- Timeline ---------- */
   .flock { position: relative; overflow: hidden; }
@@ -803,10 +810,9 @@
     </div>
   </section>
 
-  <!-- STATS -->
+  <!-- STATS + DOGS -->
   <section class="flock">
     <canvas class="birds" data-shape="gull" aria-hidden="true"></canvas>
-    <h2>Maddie, <span>by the numbers</span></h2>
     <div class="stats">
       <div class="stat-card">
         <div class="value" id="stat-age">–</div>
@@ -837,6 +843,26 @@
         <div class="value" id="stat-days">–</div>
         <div class="label">Days married</div>
         <div class="meta">and counting</div>
+      </div>
+    </div>
+    <div class="dogs stats-dogs">
+      <div class="dog-card">
+        <div class="dog-photo">
+          <span class="paw-badge">🐾</span>
+          <img src="img/tao.jpg" alt="Tao, the border collie" loading="lazy">
+        </div>
+        <h3>Tao</h3>
+        <div class="breed">Border Collie</div>
+        <p>&ldquo;Happy birthday, Mom! I rounded everyone up so we could say it all at once. You're my favorite human.&rdquo;</p>
+      </div>
+      <div class="dog-card">
+        <div class="dog-photo">
+          <span class="paw-badge">🐾</span>
+          <img src="img/raven.jpg" alt="Raven, the German shepherd" loading="lazy">
+        </div>
+        <h3>Raven</h3>
+        <div class="breed">German Shepherd</div>
+        <p>&ldquo;Happy birthday, Mom. Perimeter's secure, the day is all yours. I love you the most &mdash; don't tell Tao.&rdquo;</p>
       </div>
     </div>
   </section>
@@ -879,31 +905,6 @@
     </div>
   </section>
 
-  <!-- DOGS -->
-  <section class="flock">
-    <canvas class="birds" data-shape="paw" aria-hidden="true"></canvas>
-    <h2>The <span>dogs</span></h2>
-    <div class="dogs">
-      <div class="dog-card">
-        <div class="dog-photo">
-          <span class="paw-badge">🐾</span>
-          <img src="img/tao.jpg" alt="Tao, the border collie" loading="lazy">
-        </div>
-        <h3>Tao</h3>
-        <div class="breed">Border Collie</div>
-        <p>&ldquo;Happy birthday, Mom! I rounded everyone up so we could say it all at once. You're my favorite human.&rdquo;</p>
-      </div>
-      <div class="dog-card">
-        <div class="dog-photo">
-          <span class="paw-badge">🐾</span>
-          <img src="img/raven.jpg" alt="Raven, the German shepherd" loading="lazy">
-        </div>
-        <h3>Raven</h3>
-        <div class="breed">German Shepherd</div>
-        <p>&ldquo;Happy birthday, Mom. Perimeter's secure, the day is all yours. I love you the most &mdash; don't tell Tao.&rdquo;</p>
-      </div>
-    </div>
-  </section>
 
   <!-- LOVE NOTE -->
   <section class="storm-section">
