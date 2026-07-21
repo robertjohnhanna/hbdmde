@@ -524,7 +524,7 @@
     animation: none;   /* Regulus keeps its own SVG pulse */
   }
   @media (prefers-reduced-motion: reduce) { .c-star { animation: none; } }
-  .c-label { fill: #cfc8f0; font-size: 12px; font-family: 'Segoe UI', sans-serif; letter-spacing: .04em; }
+  .c-label { fill: #cfc8f0; font-size: 15px; font-family: 'Segoe UI', sans-serif; letter-spacing: .04em; }
   .c-label.heart { fill: #ffd166; font-weight: 700; }
 
   .zodiac { text-align: center; }
@@ -755,17 +755,18 @@
     /* favorite */
     .favorite { padding: 3.5rem 1.2rem; }
 
-    /* chart: keep the constellation, drop the wordy extras on mobile */
+    /* chart: same content as the wide layout (star names, traits, blurb) — just tightened */
     .cosmos-wrap { padding: 2.2rem 1.05rem; }
     .cosmos-sub { margin-bottom: 1rem; font-size: .9rem; }
     .chart-grid { grid-template-columns: 1fr; gap: .3rem; }
-    .constellation { max-width: 250px; margin: 0 auto .4rem; padding: 0; border: none; background: none; }
-    .c-label { display: none; }
-    .zodiac .traits, .zodiac .blurb { display: none; }
+    .constellation { max-width: 320px; margin: 0 auto .3rem; padding: 0; border: none; background: none; }
     .zodiac .glyph { font-size: 2.6rem; }
     .zodiac .sign { font-size: 1.4rem; }
     .zodiac .rulers { margin-bottom: .7rem; font-size: .78rem; }
-    .big-three { margin-top: .7rem; gap: .45rem; max-width: 320px; }
+    .traits { gap: .4rem; margin-bottom: .7rem; }
+    .traits span { padding: .3rem .7rem; font-size: .8rem; }
+    .zodiac .blurb { font-size: .9rem; line-height: 1.55; max-width: 340px; }
+    .big-three { margin-top: .9rem; gap: .45rem; max-width: 320px; }
     .bt-card { padding: .6rem .3rem; }
   }
 
@@ -838,20 +839,22 @@
     .unlock-note { margin-top: .5rem; gap: .25rem; }
     .unlock-msg { font-size: .66rem; max-width: 44ch; line-height: 1.35; }
 
-    /* Chart: keep the two panels side by side, drop the wordy extras */
-    .cosmos-wrap { padding: .8rem 1rem; }
-    .cosmos-sub { margin-bottom: .5rem; font-size: .7rem; }
+    /* Chart: two panels side by side, same content as everywhere — just very compact */
+    .cosmos-wrap { padding: .7rem 1rem; }
+    .cosmos-sub { margin-bottom: .4rem; font-size: .7rem; }
     .chart-grid { grid-template-columns: 1fr 1fr; gap: 1rem; align-items: center; }
-    .constellation { max-width: 300px; margin: 0 auto; padding: 0; border: none; background: none; }
-    .c-label { display: none; }
-    .zodiac .traits, .zodiac .blurb { display: none; }
-    .zodiac .glyph { font-size: 2rem; }
-    .zodiac .sign { font-size: 1.3rem; margin: .1rem 0 0; }
-    .zodiac .rulers { font-size: .66rem; margin-bottom: .5rem; }
-    .big-three { margin-top: .5rem; gap: .4rem; max-width: 320px; }
-    .bt-card { padding: .5rem .3rem; }
-    .bt-glyph { font-size: 1.2rem; }
-    .bt-desc { display: none; }
+    .constellation { max-width: 250px; margin: 0 auto; padding: 0; border: none; background: none; }
+    .zodiac .glyph { font-size: 1.6rem; }
+    .zodiac .sign { font-size: 1.15rem; margin: .05rem 0 0; }
+    .zodiac .rulers { font-size: .6rem; margin-bottom: .35rem; }
+    .traits { gap: .26rem; margin-bottom: .35rem; }
+    .traits span { padding: .16rem .48rem; font-size: .6rem; }
+    .zodiac .blurb { font-size: .64rem; line-height: 1.32; max-width: 320px; margin-bottom: 0; }
+    .big-three { margin-top: .35rem; gap: .35rem; max-width: 300px; }
+    .bt-card { padding: .4rem .3rem; }
+    .bt-glyph { font-size: 1.1rem; }
+    .bt-sign { font-size: .92rem; margin: .15rem 0 .02rem; }
+    .bt-desc { font-size: .56rem; margin-top: .15rem; line-height: 1.22; }
 
     /* Numbers: 3 across so the six cards are two short rows */
     .stats { grid-template-columns: repeat(3, 1fr); max-width: 720px; gap: .4rem; }
@@ -896,8 +899,8 @@
     .cosmos-wrap { padding: 1.3rem 1.5rem; }
     .cosmos-sub { margin-bottom: 1rem; }
     .constellation { max-width: 440px; margin-inline: auto; }
-    .zodiac .blurb { display: none; }
     .zodiac .traits { margin: .6rem 0; }
+    .zodiac .blurb { font-size: .92rem; line-height: 1.55; }
     .big-three { margin-top: 1rem; }
 
     /* Story: two columns of moments instead of the tall vertical timeline */
@@ -975,7 +978,7 @@
               </circle>
             </g>
             <!-- labels -->
-            <text class="c-label heart" x="430" y="266" text-anchor="middle">Regulus &mdash; the Heart of the Lion</text>
+            <text class="c-label heart" x="430" y="270" text-anchor="middle">Regulus</text>
             <text class="c-label" x="60" y="192" text-anchor="middle">Denebola</text>
           </svg>
         </div>
